@@ -94,6 +94,7 @@
   },
   "devDependencies": {
     "antd": "^3.4.1",
-    "babel-plugin-import": "^1.7.0"
+    "babel-plugin-import": "^1.7.0",
+    "bundle-loader": "^0.5.6"
   }
 }

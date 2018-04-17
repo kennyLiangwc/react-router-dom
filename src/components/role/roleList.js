@@ -59,7 +59,7 @@ export default class RoleList extends Component {
         }
     }
     render() {
-    	console.log(111)
+    	// console.log(111)
         return (
             <div>
                 <Alert message={"角色列表"} style={{margin: "12px 0"}}/>
