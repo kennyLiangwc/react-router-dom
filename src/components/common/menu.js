@@ -7,7 +7,7 @@ let menu = {
                 {
                     id: "queryRole",
                     text: "角色列表",
-                    path: "/app/roleList",
+                    path: "/app/role/roleList",
                     contain: [
 
                     ]
@@ -15,7 +15,7 @@ let menu = {
                 {
                     id: "addRole",
                     text: "新增角色1",
-                    path: "/app/addRole",
+                    path: "/app/role/addRole",
                     contain: [
                         {
                             "name": "新增角色",
@@ -26,7 +26,7 @@ let menu = {
                 {
                     id: "updateRole",
                     text: "修改角色2",
-                    path: "path/test",
+                    path: "/app/role/editRole",
                     contain: [
                         {
                             "name": "新增角色",

@@ -5,7 +5,7 @@ export default class RoleList extends Component {
         super(props)
     }
     render() {
-    	console.log(111)
+    	// console.log(111)
         return (
             <div>addRole</div>
         )

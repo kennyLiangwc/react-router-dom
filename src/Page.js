@@ -16,6 +16,7 @@ export default () => (
 			<Route path="/app" component={App}></Route>
 			<Route path="/login" component={Login}></Route>
 			<Route path="/404" component={NotFound}></Route>
+			
 		</Switch>
 	</BrowserRouter>
 )

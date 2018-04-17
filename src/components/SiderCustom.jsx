@@ -16,4 +16,4 @@ class SiderCustom extends Component {
 		)
 	}
 }
-export default withRouter(SiderCustom)
+export default SiderCustom
