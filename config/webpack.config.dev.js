@@ -207,6 +207,13 @@ module.exports = {
               name: 'static/media/[name].[hash:8].[ext]',
             },
           },
+          {  
+             test: /\.bundle\.js$/,  
+             loader: 'bundle-loader',  
+             options: {  
+                 lazy: true
+             }  
+          } 
         ],
       },
       // ** STOP ** Are you adding a new loader?
