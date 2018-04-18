@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Alert, Form , Input, Button, Table } from "antd";
 import { Link } from "react-router-dom";
+import permission from "../../utils/permission"
 const FormItem = Form.Item;
 
 
@@ -22,14 +23,9 @@ const columns = [{
     key: 'action',
     render: (text, record) => (
       <span>
-          <Link to={`/app/role/editRole/${record.key}`}>edit</Link>  
-        {/* <Link to={{
-            pathname: '/app/role/editRole',
-            search: `?record=${text}`,
-            // hash: '#the-hash',
-            state: { fromDashboard: true }
-            }}>111
-        </Link> */}
+          {/* { permission.editRole ? <Link to={`/app/role/editRole/${record.key}`}>edit</Link> : "" } | */}
+            <Link to={`/app/role/editRole/${record.key}`}>edit</Link> |
+          { permission.addRole ? <Link to={`/app/role/addRole`}>add</Link> : "" }
       </span>
     ),
 }];

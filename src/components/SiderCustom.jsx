@@ -5,12 +5,18 @@ import menu from './common/menu';
 import SiderMenu from './SiderMenu';
 
 class SiderCustom extends Component {
+	handleClick(e) {
+		console.log('ee',e);
+		let m = require("bundle-loader./common/menu");
+		console.log('mmmmm',m)
+	}
 	render() {
 		return (
 			<SiderMenu
-				menus={menu.role}
+				menus={menu}
 				theme="dark"
-                mode="inline"
+				mode="inline"
+				onClick={this.handleClick}
 			/>
 
 		)

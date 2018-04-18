@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const renderMenuItem =  (
 	({id,text,path,contain,...props}) => 
 		<Menu.Item
-			key={id || text}
+			key={path || id}
 			{...props}
 
 		>
