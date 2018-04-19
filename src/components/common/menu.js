@@ -3,6 +3,7 @@ let menu = {
         {
             text: "角色管理",
             icon: "icon_role",
+            id: "role",
             children: [
                 {
                     id: "queryRole",
@@ -52,6 +53,7 @@ let menu = {
         {
             text: "邀请码管理",
             icon: "",
+            id: "code",
             children: [
                 {
                     id: "addInvite",

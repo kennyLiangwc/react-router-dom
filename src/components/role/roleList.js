@@ -25,7 +25,7 @@ const columns = [{
       <span>
           {/* { permission.editRole ? <Link to={`/app/role/editRole/${record.key}`}>edit</Link> : "" } | */}
             <Link to={`/app/role/editRole/${record.key}`}>edit</Link> |
-          { permission.addRole ? <Link to={`/app/role/addRole`}>add</Link> : "" }
+          { permission.addRole ? <Link to={`/app/chat`}>add</Link> : "" }
       </span>
     ),
 }];

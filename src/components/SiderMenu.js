@@ -14,9 +14,9 @@ const renderMenuItem =  (
 )
 
 const renderSubMenu = (
-	({text,icon,children,...props}) => 
+	({text,icon,id,children,...props}) => 
 		<Menu.SubMenu 
-			key={text}
+			key={id}
 			{...props}
 			title={text}
 		>

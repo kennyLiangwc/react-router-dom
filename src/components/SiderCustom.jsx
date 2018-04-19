@@ -5,28 +5,31 @@ import menu from './common/menu';
 import SiderMenu from './SiderMenu';
 
 class SiderCustom extends Component {
-	construtor(props) {
-		//super(props);
-		this.state = {
-			selectedKey: "",
-			openKey: ""
-		}
+	// constructor(props) {
+	// 	super(props);
+		
+	// }
+	state = {
+		selectedKey: "",
+		openKey: ""
 	}
 	componentDidMount() {
-
+		this.setMenuOpen()
 	}
 	handleClick(e) {
 		console.log('ee',e);
-		//let m = require("bundle-loader!./common/menu");
-		//console.log('mmmmm',m)
 		this.setState({
-			selectedKey: e.key
+			selectedKey: e.key,
+			openKey: e.keyPath[1]
 		})
 	};
 	setMenuOpen = props => {
-        const { pathname } = props.location;
+		console.log(this.state,this.props);
+		const { pathname } = this.props.location;
+		// let k = pathname.substr(0, pathname.lastIndexOf('/'));
+		let k = pathname.split("/")[2];
         this.setState({
-            openKey: pathname.substr(0, pathname.lastIndexOf('/')),
+            openKey: pathname.split("/")[2],
             selectedKey: pathname
         });
     };
@@ -34,13 +37,14 @@ class SiderCustom extends Component {
 		return (
 			<SiderMenu
 				menus={menu}
-				theme="dark"
+				theme="light"
 				mode="inline"
-				onClick={this.handleClick}
+				onClick={this.handleClick.bind(this)}
 				selectedKeys={[this.state.selectedKey]}
+				openKeys={[this.state.openKey]}
 			/>
 
 		)
 	}
 }
-export default SiderCustom
+export default withRouter(SiderCustom)

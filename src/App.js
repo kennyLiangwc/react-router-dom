@@ -14,6 +14,19 @@ const { Header, Footer, Sider, Content } = Layout;
 
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state= {
+      pathname: this.props.loacation
+    }
+  }
+  componentDidMount() {
+    this.setState({
+      a: 6,
+      pathname: "aaaaa"
+    });
+    // console.log(this.setState)
+  }
   render() {
     return (
         <Layout>
