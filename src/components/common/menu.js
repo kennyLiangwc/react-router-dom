@@ -40,11 +40,22 @@ let menu = {
                 {
                     id: "delRole",
                     text: "删除角色3",
-                    path: "path/test",
+                    path: "/app/role/delRole",
                     contain: [
                         {
                             "name": "新增角色",
-                            "path": "delRole"
+                            "path": "/app/role/delRole"
+                        }
+                    ]
+                },
+                {
+                    id: "testRole",
+                    text: "测试角色3",
+                    path: "/app/role/testRole",
+                    contain: [
+                        {
+                            "name": "新增角色",
+                            "path": "/app/role/testRole"
                         }
                     ]
                 }
@@ -56,9 +67,9 @@ let menu = {
             id: "code",
             children: [
                 {
-                    id: "addInvite",
-                    text: "新增邀请码1",
-                    path: "1",
+                    id: "InviteList",
+                    text: "邀请码列表",
+                    path: "/app/code/codeList",
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -67,9 +78,9 @@ let menu = {
                     ]
                 },
                 {
-                    id: "addInvite2",
-                    text: "新增邀请码2",
-                    path: "2",
+                    id: "addInvite",
+                    text: "新增邀请码",
+                    path: "/app/code/addCode",
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -79,8 +90,8 @@ let menu = {
                 },
                 {
                     id: "updateInvite",
-                    text: "修改邀请码3",
-                    path: "3",
+                    text: "修改邀请码",
+                    path: "/app/code/updateCode",
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -91,7 +102,7 @@ let menu = {
                 {
                     id: "delInvite",
                     text: "删除邀请码",
-                    path: "4",
+                    path: "/app/code/delCode",
                     contain: [
                         {
                             "name": "新增邀请码4",

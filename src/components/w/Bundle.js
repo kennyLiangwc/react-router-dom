@@ -9,10 +9,12 @@ export default class Bundle extends Component {
   }
 
   componentWillMount() {
+      console.log('props',this.props)
       this.load(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
+      console.log('nextProps',nextProps)
       if (nextProps.load !== this.props.load) {
           this.load(nextProps)
       }

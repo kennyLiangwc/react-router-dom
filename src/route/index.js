@@ -1,23 +1,19 @@
 import React, { Component } from 'react';
 import { Route, Redirect, Switch } from 'react-router-dom';
 
-import RoleList1 from "../components/role/roleList"
-import AddRole from "../components/role/addRole"
-import EditRole from "../components/role/editRole"
-// import EditRole from "bundle-loader?lazy!../components/role/editRole"
+// import RoleList1 from "../components/role/roleList"
+// import AddRole from "../components/role/addRole"
+// import EditRole from "../components/role/editRole"
 import Bundle from "../components/w/Bundle.js"
 
-// const EditBundle = (props) => (
-//     <Bundle load={EditRole}>
-//         {(Component) => <Component {...props} />}
+
+
+
+// const Chat = (props) => (
+//     <Bundle load={() => import('../components/chat')}>
+//         {(A) => <A {...props}/>}
 //     </Bundle>
 // );
-
-const Chat = (props) => (
-    <Bundle load={() => import('../components/chat')}>
-        {(Chat) => <Chat {...props}/>}
-    </Bundle>
-);
 
 let arr = [
 	"/app/role/roleList",
@@ -34,6 +30,19 @@ const AuthRoute = ({component: COM, ...rest}) => {
 	}
 	
 }
+
+
+const BundleRoute = ({...rest}) => {
+	let path = rest.path;
+	console.log("rest",rest)
+	path = path.slice(5);
+	console.log("path",path);
+	// if()
+	return <Route {...rest} render={({ID}) => <Bundle load={(ID) => import(`../components/${path}`)}>
+		{(ID) => <ID {...rest} />}
+	</Bundle>}/>
+}
+
 
 const A = () => (
 	<div>This is A</div>
@@ -53,61 +62,90 @@ const testRoute = () => (<div>
 const routes = [
 	{
 		path: "/app/role/roleList",
-		component: RoleList1,
 		exact: true,
-		id: "roleList"
+		id: "RoleList"
 	},
 	{
 		path: "/app/role/addRole",
-		component: AddRole,
 		exact: true,
-		id: "addRole"
+		id: "AddRole"
 	},
 	{
 		path: "/app/role/editRole",
-		component: EditRole,
 		exact: true,
-		id: "editRole"
+		id: "EditRole"
 	},
 	{
-		path: "/app/role/editRole/:id",
-		component: EditRole,
+		path: "/app/role/delRole",
 		exact: true,
-		id: "editRole"
+		id: "DelRole"
+	},
+	{
+		path: "/app/role/testRole",
+		exact: true,
+		id: "TestRole"
+	},
+	{
+		path: "/app/code/codeList",
+		exact: true,
+		id: "CodeList"
+	},
+	{
+		path: "/app/code/addCode",
+		exact: true,
+		id: "AddCode"
+	},
+	{
+		path: "/app/code/updateCode",
+		exact: true,
+		id: "updateCode"
+	},
+	{
+		path: "/app/code/delCode",
+		exact: true,
+		id: "DelCode"
 	}
 ]
-// const B = ({component:COM,id,...rest}) => (
-// 	<Bundle load={() => import(`../component/role/${id}`)}>
-// 		return {<Route {...rest} render={(props) => <COM {...props} />}></Route>}
-// 	</Bundle>
-// );
-// console.log("BBBBBB",B);
 
 
 
+// const home = (location, callback) => {
+// 	require.ensure([], require => {
+// 	  callback(null, require('modules/home'))
+// 	}, 'home')  
+//   }
 
+// const ensureModule = (name,entry) => (loacation,callback) (
+// 	require.ensure([],require => {
+// 		callback(null,require(entry))
+// 	},name)
+// )
 
 
 
 export default class Router extends Component {
 	render() {
 		return (<Switch>
-			{/* // <Route exact path="/app/role/roleList" component={RoleList1}></Route> */}
+			{/* <BundleRoute exact path="/app/role/roleList" ID="RoleList"></BundleRoute> */}
 			{/* <AuthRoute exact path="/app/role/roleList" component={RoleList1} />
 			<AuthRoute exact path="/app/role/addRole" component={AddRole} /> */}
-			{/* <Route exact path="/app/role/addRole" component={AddRole}></Route> */}
+			{/* <BundleRoute exact path="/app/role/addRole" ID="AddRole"></BundleRoute>
+			<BundleRoute exact path="/app/role/editRole" ID="EditRole"></BundleRoute>
+			<BundleRoute exact path="/app/role/delRole" ID="DelRole"></BundleRoute>
+			<BundleRoute exact path="/app/role/testRole" ID="TestRole"></BundleRoute> */}
 			{/* <AuthRoute exact path="/app/role/editRole" component={EditRole}></AuthRoute>
-			<Route exact path="/app/role/editRole/:id" component={EditRole}></Route> */}
+			 
 			{/* <Route path="/app/test" component={testRoute}></Route> */}
 
 			{
-				routes.map(({component: COM,...rest},i) => {
-					return <Route key={i} {...rest} render={(props) => <COM {...props} />}></Route>
+				routes.map(({...rest},i) => {
+					// return <Route key={i} {...rest} render={(props) => <COM {...props} />}></Route>
+					return <BundleRoute key={i} {...rest}/>
 				})
 			}
-			{/* <B path="/app/role/addRole" compnent={EditRole}/> */}
 			<Route path="/app/test" component={testRoute}></Route>
-			<Route exact path="/app/chat" component={Chat}></Route>
+			{/* <Route exact path="/app/chat" component={Chat}></Route> */}
+			<BundleRoute exact path="/app/chat"/>
 			<Route render={() => <Redirect to="/404" />} />
 		</Switch>)
 	}
