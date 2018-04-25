@@ -7,9 +7,6 @@ import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import Sider from "./components/common/sider"
-
-import RoleList from "./components/role/roleList"
 
 import Page from "./Page"
 

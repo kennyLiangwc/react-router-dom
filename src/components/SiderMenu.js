@@ -3,24 +3,26 @@ import { Menu, Icon } from 'antd';
 import { Link } from 'react-router-dom';
 
 const renderMenuItem =  (
-	({id,text,path,contain,...props}) => 
-		<Menu.Item
+	({id,text,path,contain,isMenu,...props}) => 
+	isMenu ?<Menu.Item
 			key={path || id}
 			{...props}
 
 		>
 			<Link to={path}>{text}</Link>
-		</Menu.Item>
+		</Menu.Item> : ""
 )
 
 const renderSubMenu = (
-	({text,icon,id,children,...props}) => 
+	({text,icon,id,children,isMenu,...props}) => 
 		<Menu.SubMenu 
 			key={id}
 			{...props}
 			title={text}
 		>
-		{ children.map(item => renderMenuItem(item)) }
+		{/* { children.filter(item => item.isMenurenderMenuItem(item)) } */}
+		
+		{ children.map(item =>renderMenuItem(item)) }
 		</Menu.SubMenu>
 )
 

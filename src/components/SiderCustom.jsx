@@ -17,17 +17,15 @@ class SiderCustom extends Component {
 		this.setMenuOpen()
 	}
 	handleClick(e) {
-		console.log('ee',e);
+		// console.log('ee',e);
 		this.setState({
 			selectedKey: e.key,
 			openKey: e.keyPath[1]
 		})
 	};
 	setMenuOpen = props => {
-		console.log(this.state,this.props);
+		// console.log(this.state,this.props);
 		const { pathname } = this.props.location;
-		// let k = pathname.substr(0, pathname.lastIndexOf('/'));
-		let k = pathname.split("/")[2];
         this.setState({
             openKey: pathname.split("/")[2],
             selectedKey: pathname
@@ -36,7 +34,7 @@ class SiderCustom extends Component {
 	render() {
 		return (
 			<SiderMenu
-				menus={menu}
+				menus={menu.getMenuByRightList("role")}
 				theme="light"
 				mode="inline"
 				onClick={this.handleClick.bind(this)}

@@ -1,4 +1,6 @@
-let menu = {
+import { rule } from "postcss";
+
+let MenuMap = {
     role: [
         {
             text: "角色管理",
@@ -6,9 +8,11 @@ let menu = {
             id: "role",
             children: [
                 {
-                    id: "queryRole",
+                    id: "RoleList",
                     text: "角色列表",
                     path: "/app/role/roleList",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             path: "/app/role/roleList"
@@ -19,6 +23,8 @@ let menu = {
                     id: "addRole",
                     text: "新增角色1",
                     path: "/app/role/addRole",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增角色",
@@ -30,6 +36,21 @@ let menu = {
                     id: "updateRole",
                     text: "修改角色2",
                     path: "/app/role/editRole",
+                    isMenu: true,
+                    exact: true,
+                    contain: [
+                        {
+                            "name": "新增角色",
+                            "path": "/app/role/editRole"
+                        }
+                    ]
+                },
+                {
+                    id: "updateRole",
+                    text: "修改角色2",
+                    path: "/app/role/editRole/:id",
+                    isMenu: false,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增角色",
@@ -41,6 +62,8 @@ let menu = {
                     id: "delRole",
                     text: "删除角色3",
                     path: "/app/role/delRole",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增角色",
@@ -52,10 +75,24 @@ let menu = {
                     id: "testRole",
                     text: "测试角色3",
                     path: "/app/role/testRole",
+                    isMenu: false,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增角色",
                             "path": "/app/role/testRole"
+                        }
+                    ]
+                },
+                {
+                    id: "Test",
+                    text: "测试",
+                    path: "/app/test/test",
+                    isMenu: false,
+                    exact: true,
+                    contain: [
+                        {
+                            
                         }
                     ]
                 }
@@ -70,6 +107,8 @@ let menu = {
                     id: "InviteList",
                     text: "邀请码列表",
                     path: "/app/code/codeList",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -81,6 +120,8 @@ let menu = {
                     id: "addInvite",
                     text: "新增邀请码",
                     path: "/app/code/addCode",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -92,6 +133,8 @@ let menu = {
                     id: "updateInvite",
                     text: "修改邀请码",
                     path: "/app/code/updateCode",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增邀请码",
@@ -103,6 +146,8 @@ let menu = {
                     id: "delInvite",
                     text: "删除邀请码",
                     path: "/app/code/delCode",
+                    isMenu: true,
+                    exact: true,
                     contain: [
                         {
                             "name": "新增邀请码4",
@@ -118,17 +163,7 @@ let menu = {
             text: "邀请码管理666",
             icon: "",
             children: [
-                {
-                    id: "addInvite",
-                    text: "新增邀请码1",
-                    path: "1",
-                    contain: [
-                        {
-                            "name": "新增邀请码",
-                            path: "add"
-                        }
-                    ]
-                },
+                
                 {
                     id: "addInvite2",
                     text: "新增邀请码2",
@@ -182,9 +217,11 @@ let arr = [
 
 
 function getMenuByRightList(module, rightList) {
-    
+    if(window.location.hostname !== 'txent.qq.com') {
+        return MenuMap[module]; // XXX 开发用
+    }
     const roleList = rightList;
-    let menuList = menu[module]; // 此时为数组, role等;
+    let menuList = MenuMap[module]; // 此时为数组, role等;
     console.log()
     const tempRightList = roleList.map(function(v) {
         return v.path;
@@ -196,8 +233,6 @@ function getMenuByRightList(module, rightList) {
     const resultList = []; // 接收新的menu
     menuList.forEach(function (menu1) {
         var menu2Arr = menu1.children.filter(function (menu2) {
-            // 需要rightList判断一次
-            // return true;
             for (var i = 0; i < menu2.contain.length; i++) {
                 if (tempRightList.includes(menu2.contain[i].path)) {
                     return true
@@ -216,5 +251,23 @@ function getMenuByRightList(module, rightList) {
     return resultList
 }
 
+
+function getRouteList() {
+    let routeList = [], menuList = getMenuByRightList('role',arr);
+    menuList.map(({children}) => {
+        children.map(({id,path,exact}) => {
+            routeList.push({
+                id,
+                path,
+                exact
+            })
+        })
+    })
+    return routeList
+}
+
 let menuList = getMenuByRightList('role',arr);
-export default menu.role
+export default {
+    getMenuByRightList: getMenuByRightList,
+    getRouteList: getRouteList
+}

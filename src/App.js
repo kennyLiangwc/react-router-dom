@@ -16,6 +16,7 @@ const { Header, Footer, Sider, Content } = Layout;
 class App extends Component {
   constructor(props) {
     super(props);
+    console.log("this",this)
     this.state= {
       pathname: this.props.loacation
     }
@@ -36,6 +37,7 @@ class App extends Component {
               <SiderCustom />
             </Sider>
             <Content>
+              {/* 动态替换conten里的内容 */}
               <Routes />
             </Content>
           </Layout>
