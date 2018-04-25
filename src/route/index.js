@@ -40,7 +40,7 @@ export default class Router extends Component {
 				})
 			}
 			<BundleRoute exact path="/app/chat"/>
-			{/* <Route render={() => <Redirect to="/404" />} /> */}
+			<Route render={() => <Redirect to="/404" />} />
 		</Switch>)
 	}
 }
