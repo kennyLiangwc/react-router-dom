@@ -28,6 +28,7 @@
     "fs-extra": "3.0.1",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
+    "jquery": "^3.3.1",
     "object-assign": "4.1.1",
     "postcss-flexbugs-fixes": "3.2.0",
     "postcss-loader": "2.0.8",
@@ -96,6 +97,7 @@
   "devDependencies": {
     "antd": "^3.4.1",
     "babel-plugin-import": "^1.7.0",
-    "bundle-loader": "^0.5.6"
+    "bundle-loader": "^0.5.6",
+    "graphql-request": "^1.5.2"
   }
 }

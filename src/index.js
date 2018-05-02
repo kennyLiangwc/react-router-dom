@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'antd/dist/antd.css';
+// import $ from "./lib/jquery"
+// import $ from "jquery"
+
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
@@ -9,6 +12,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 
 import Page from "./Page"
+
 
 
 // class Demo extends React.Component  {

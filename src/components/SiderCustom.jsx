@@ -30,7 +30,10 @@ class SiderCustom extends Component {
             openKey: pathname.split("/")[2],
             selectedKey: pathname
         });
-    };
+	};
+	changeMenu = e => {
+		console.log("e",e)
+	}
 	render() {
 		return (
 			<SiderMenu
@@ -40,6 +43,8 @@ class SiderCustom extends Component {
 				onClick={this.handleClick.bind(this)}
 				selectedKeys={[this.state.selectedKey]}
 				openKeys={["role","code"]}
+				onOpenChange={this.changeMenu}
+				
 			/>
 
 		)
