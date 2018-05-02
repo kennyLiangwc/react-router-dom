@@ -2,19 +2,21 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import 'antd/dist/antd.css';
-// import $ from "./lib/jquery"
-// import $ from "jquery"
-
 
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
+import { createStore, applyMiddleware } from "redux";
+import thunk from 'redux-thunk';
+import { Provider } from "react-redux";
+import rootReducer from "./reducers"
 
 import Page from "./Page"
 
-
-
+const middleware = [thunk];
+const store = createStore(rootReducer,applyMiddleware(...middleware))
+console.log(store.getState());
 // class Demo extends React.Component  {
 //   render() {
 //     return <div>11</div>
@@ -60,5 +62,8 @@ import Page from "./Page"
 
 
 
-ReactDOM.render(<Page />, document.getElementById('root'));
+ReactDOM.render(
+	<Provider store={store}>
+		<Page />
+	</Provider>, document.getElementById('root'));
 registerServiceWorker();
