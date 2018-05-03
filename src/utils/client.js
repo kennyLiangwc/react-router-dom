@@ -13,6 +13,15 @@ const gtk = CSRFToken(sessionId);
 const JwtToken = util.getCookie(StaticCommonConst.COOKIE_NAMES.MIS.JWT_TOKEN_NAME);
 // console.log('Jwt token', JwtToken, sessionId, document.cookie);
 
+function showLoading(needLoading) {
+    let showLoading = document.getElementById("loading");
+    if(needLoading) {
+        showLoading.style.display = "";
+    }else {
+        showLoading.style.display = "none";
+    }
+}
+
 const client = new GraphQLClient('/api/mis', {
     headers: {
         Authorization: JwtToken,
@@ -22,27 +31,23 @@ const client = new GraphQLClient('/api/mis', {
 
 let http = {};
 
-http.post = function(action,params) {
+http.post = function(action,params,needLoading = true) {
+    showLoading(needLoading)
+    console.log("needLoading",needLoading)
     const client = new GraphQLClient('/api/mis', {
         headers: {
             Authorization: JwtToken,
             gtk
         }
     });
-    // try {
-    //     // ui.toast("success","1")
-    //     let result = await client.request(action);
-
-    // } catch (error) {
-    //     console.log(error)
-    //     ui.toast("error",error)
-    // }
     return new Promise((reslove,reject) => {
         client.request(action).then(data => {
-                reslove(data)
+                reslove(data);
+                showLoading(false)
         }).catch(error => {
             let _errors = JSON.parse(JSON.stringify(error));
             const { errors } = _errors.response;
+            showLoading(false);
             if(errors && errors.length > 0) {
                 try {
                     let message = JSON.parse(errors[0].message);
