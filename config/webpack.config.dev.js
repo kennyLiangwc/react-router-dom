@@ -150,7 +150,8 @@ module.exports = {
               // directory for faster rebuilds.
               cacheDirectory: true,
               "plugins": [    //antd按需加载插件
-                ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }] // `style: true` 会加载 less 文件
+                ["import", { "libraryName": "antd", "libraryDirectory": "es", "style": "css" }], // `style: true` 会加载 less 文件
+                ["transform-runtime"]
               ]
             },
           },

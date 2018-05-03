@@ -4,10 +4,8 @@ import './App.css';
 import { Link } from 'react-router-dom'
 import { Layout } from 'antd';
 
-
-
-// import Sider from "./components/common/sider"
 import SiderCustom from "./components/SiderCustom"
+import Head from "./components/header"
 import Routes from "./route"
 
 const { Header, Footer, Sider, Content } = Layout;
@@ -16,33 +14,29 @@ const { Header, Footer, Sider, Content } = Layout;
 class App extends Component {
   constructor(props) {
     super(props);
-    console.log("this",this)
-    this.state= {
+    this.state = {
       pathname: this.props.loacation
     }
   }
   componentDidMount() {
-    this.setState({
-      a: 6,
-      pathname: "aaaaa"
-    });
-    // console.log(this.setState)
   }
   render() {
     return (
+      <Layout >
+        <Header style={{ color: "white" }} >
+          <Head />
+        </Header>
         <Layout>
-          <Header>Header</Header>
-          <Layout>
-            <Sider>
-              <SiderCustom />
-            </Sider>
-            <Content>
-              {/* 动态替换conten里的内容 */}
-              <Routes />
-            </Content>
-          </Layout>
-          <Footer>Footer</Footer>
+          <Sider>
+            <SiderCustom />
+          </Sider>
+          <Content style={{margin: "4px"}}>
+            {/* 动态替换conten里的内容 */}
+            <Routes />
+          </Content>
         </Layout>
+        <Footer>Footer</Footer>
+      </Layout>
     );
   }
 }

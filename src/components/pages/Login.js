@@ -1,7 +1,5 @@
 import React,{ Component } from "react";
 import ui from "../../utils/ui"
-// console.log(ui.showWxLogin())
-
 export default class Login extends Component {
 	constructor(props) {
 		super(props);
