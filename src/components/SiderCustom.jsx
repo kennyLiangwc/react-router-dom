@@ -42,7 +42,7 @@ class SiderCustom extends Component {
 				mode="inline"
 				onClick={this.handleClick.bind(this)}
 				selectedKeys={[this.state.selectedKey]}
-				openKeys={["role","code"]}
+				openKeys={["role","code","user"]}
 				onOpenChange={this.changeMenu}
 				
 			/>

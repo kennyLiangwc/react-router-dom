@@ -30,7 +30,7 @@ class App extends Component {
           <Sider>
             <SiderCustom />
           </Sider>
-          <Content style={{margin: "4px"}}>
+          <Content style={{margin: "10px"}}>
             {/* 动态替换conten里的内容 */}
             <Routes />
           </Content>

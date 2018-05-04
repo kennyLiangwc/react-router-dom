@@ -33,7 +33,6 @@ let http = {};
 
 http.post = function(action,params,needLoading = true) {
     showLoading(needLoading)
-    console.log("needLoading",needLoading)
     const client = new GraphQLClient('/api/mis', {
         headers: {
             Authorization: JwtToken,
@@ -41,7 +40,7 @@ http.post = function(action,params,needLoading = true) {
         }
     });
     return new Promise((reslove,reject) => {
-        client.request(action).then(data => {
+        client.request(action,params).then(data => {
                 reslove(data);
                 showLoading(false)
         }).catch(error => {

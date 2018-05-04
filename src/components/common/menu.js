@@ -3,6 +3,25 @@ import { rule } from "postcss";
 let MenuMap = {
     role: [
         {
+            text: "用户管理",
+            icon: "icon_role",
+            id: "user",
+            children: [
+                {
+                    id: "UserList",
+                    text: "用户列表",
+                    path: "/app/user/userList",
+                    isMenu: true,
+                    exact: true,
+                    contain: [
+                        {
+                            path: "/app/role/userList"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             text: "角色管理",
             icon: "icon_role",
             id: "role",

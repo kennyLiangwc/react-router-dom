@@ -5,6 +5,7 @@ import Bundle from "../components/w/Bundle.js"
 import menu from "../components/common/menu"
 import ui from "../utils/ui"
 
+
 let routes = menu.getRouteList();		//获取路由列表
 
 

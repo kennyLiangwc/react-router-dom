@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import client from "../../utils/client"
 
 
-console.log("client",client)
 
 export default class RoleList extends Component {
     constructor(props) {
@@ -12,14 +11,7 @@ export default class RoleList extends Component {
         }
     }
     componentWillMount() {
-        const query = `
-        {
-            createInviteTokens(input: {num:2,roleId:2})
-        }
-        `;
-        client.post(query).then(function(data) {
-            console.log(data)
-        })
+        
         // client.request(query).then(function (data) {
         //     console.log('gql result ', data);
         // }).catch(function (err) {
