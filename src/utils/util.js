@@ -96,5 +96,29 @@ let util = {
         }
         return true
     },
+    /**
+     * 图片cdn的地址存在数据库中，不是完整的，需要自己加上尺寸
+     * @param src
+     * @param size
+     * @returns {*}
+     */
+    dealPicUrl0(src, size) {
+        if (src.indexOf('wx.qlogo.cn') != -1) {//兼容微信头像
+            if (size != 0) {
+                return src + '/' + 64;
+            } else {
+                return src + '/0';
+            }
+        }
+        if (size != 0) {
+            size = size || 364;
+        }
+        if (src && src.substring(src.length - 2) != '/0') {
+            if (src.indexOf('p.qpic.cn') != -1) {
+                src = src + '/' + size;
+            }
+        }
+        return src;
+    }
 };
 module.exports = util;

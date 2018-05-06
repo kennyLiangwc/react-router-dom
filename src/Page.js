@@ -1,7 +1,7 @@
-import { BrowserRouter, Route, Switch, Redirect, HashRouter } from 'react-router-dom';
-import NotFound from './components/pages/NotFound';
-import Login from './components/pages/Login';
-import App from './App';
+import { Route, Switch, Redirect, HashRouter } from 'react-router-dom';
+import NotFound from './js/components/pages/NotFound';
+import Login from './js/components/pages/Login';
+import App from './js/App';
 import React, { Component } from "react";
 
 export default () => (
