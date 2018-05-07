@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Alert, Form , Input, Button, Table,Card } from "antd";
+import { Alert, Form , Input, Button, Table, Card, message } from "antd";
 import { Link } from "react-router-dom";
 import permission from "../../../utils/permission"
 import util from "../../../utils/util"
@@ -7,64 +7,111 @@ import http from "../../../utils/http"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx"
 const FormItem = Form.Item;
 
-
-const columns = [{
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    render: text => <a href="javascript:;">{text}</a>,
-  }, {
-    title: 'Age',
-    dataIndex: 'age',
-    key: 'age',
-  }, {
-    title: 'Address',
-    dataIndex: 'address',
-    key: 'address',
-  }, {
-    title: 'Action',
-    key: 'action',
-    render: (text, record) => (
-      <span>
-          {/* { permission.editRole ? <Link to={`/app/role/editRole/${record.key}`}>edit</Link> : "" } | */}
-            <Link to={`/app/role/editRole/${record.key}`}>edit</Link> |
-          { permission.addRole ? <Link to={`/app/chat`}>add</Link> : "" } |
-          <Link to={`/app/role/delRole`}>Del</Link>
-          <Link to={`/app/role/testRole`}>Test</Link>
-      </span>
-    ),
-}];
-  
-const data = [{
-    key: '1',
-    name: 'John Brown',
-    age: 32,
-    address: 'New York No. 1 Lake Park',
-  }, {
-    key: '2',
-    name: 'Jim Green',
-    age: 42,
-    address: 'London No. 1 Lake Park',
-  }, {
-    key: '3',
-    name: 'Joe Black',
-    age: 32,
-    address: 'Sidney No. 1 Lake Park',
-}];
-
 export default class RoleList extends Component {
+    state = {
+        list: []
+    }
     constructor(props) {
         super(props);
-        this.state = {
-                
-        }
+    }
+    componentDidMount() {
+        this.query()
+    }
+    query(pageNumber = 1,pageSize = 10) {
+        const query = `
+            query QueryRoleList($input:RoleInput){
+                queryRoleList(input:$input){
+                    name
+                    id
+                    description
+                    createAt
+                    updateAt
+                }
+            }
+        `;
+        const input = {};
+        http.post(query,{
+            input: input
+        }).then(data => {
+            this.setState({
+                list: data.queryRoleList
+            })
+        })
+    }
+    page = {
+        pageNumber: 1,
+        pageSize: 10,
+        total: 10
+    }
+    delRole(id) {
+        const query = `mutation DelRole($id:ID!){
+            delRole(id:$id){
+                ret
+            }
+        }`;
+        http.post(query,{
+            id: id
+        }).then(() => {
+            message.success("删除成功");
+            this.query()
+        })
     }
     render() {
-    	// console.log(111)
+        const columns = [
+            {
+                title: "角色名称",
+                dataIndex: "name"
+            },
+            {
+                title: "描述",
+                dataIndex: "description"
+            },
+            {
+                title: "创建时间",
+                dataIndex: "createAt",
+                render: (text,record) => (
+                    util.getDataFromTime(record.createAt)
+                )
+            },
+            {
+                title: "修改时间",
+                dataIndex: "updateAt",
+                render: (text,record) => (
+                    util.getDataFromTime(record.updateAt)
+                )
+            },
+            {
+                title: "操作",
+                dataIndex: "id",
+                render: (text,record) =>(
+                    <div>
+                        <Button onClick={() => this.delRole(record.id)} type="danger">删除</Button>
+                        <Button>修改</Button>
+                    </div>
+                )
+            }
+        ];
+        const pagination = {
+            current: this.page.pageNumber,
+            pageSize: this.pageSize,
+            total: this.page.total,
+            showSizechanger: true,
+            onShowSizeChange: (pageNumber,pageSize) => {
+                this.page.pageNumber = pageNumber;
+                this.page.pageSize = pageSize;
+                this.query(pageNumber,pageSize)
+            },
+            onChange: (current) => {
+                this.page.pageNumber = current;
+                this.query(current)
+            }
+        }
         return (
             <div>
-                <BreadcrumbCustom />
-                <Table columns={columns} dataSource={data} rowClassName="animated fadeInRight"/>
+                <BreadcrumbCustom first={"角色列表"}/>
+                <Card>
+                    <Table columns={columns} dataSource={this.state.list}></Table>
+                </Card>
             </div>
         )
     }

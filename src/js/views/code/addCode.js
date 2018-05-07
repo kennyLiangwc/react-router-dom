@@ -1,20 +1,31 @@
 import React, { Component } from "react";
-import { Form, Input, Button, message, Modal } from "antd"
+import { Form, Input, Button, message, Modal, Select } from "antd"
 import http from "../../../utils/http"
 import { withRouter } from "react-router-dom"
+import role from "../../common/role/role"
 // import createHashHistory from 'history/createBrowserHistory'
 // const history = createHashHistory()
+
 const FormItem = Form.Item;
 const confirm = Modal.confirm;
+const Option = Select.Option;
 
 class AddCode extends Component {
+    // roleList = [];
     constructor(props,context) {
         super(props,context);
-    }
-    state = {
-        num: ""
+        this.state = {
+            roleList: []
+        }
+        role.getRoleList().then(data => {
+            this.setState({
+                roleList: data
+            })
+        })
+        console.log("state",this.state)
     }
     componentDidMount() {
+        console.log("props",this)
         // this.props.form.validateFields();
     }
     toView() {
@@ -44,7 +55,7 @@ class AddCode extends Component {
     }
     render() {
         const { getFieldDecorator} = this.props.form;
-        const { num } = this.state;
+        console.log("render",this.state)
         return(
             <div>
                 <div style={{margin: "8px 0",borderBottom: "1px solid #1890ff",width: "100px"}}>新增邀请码</div>
@@ -56,6 +67,24 @@ class AddCode extends Component {
                             rules: [{ required: true, message: '请输入正确的数字'}],
                         })(
                             <Input  placeholder="请输入邀请码个数" type="number"/>
+                        )}
+                    </FormItem>
+                    <FormItem>
+                        {getFieldDecorator('role')(
+                            <Select
+                            style={{ width: 200 }}
+                            placeholder="请选择一个角色"
+                            >
+                                {/* {
+                                    this.state.roleList.map(v => (
+                                        <div>
+                                            <Option>1</Option>
+                                            <Option>1</Option>
+                                            <Option>1</Option>
+                                        </div>
+                                    ))
+                                } */}
+                            </Select>
                         )}
                     </FormItem>
                     <FormItem>

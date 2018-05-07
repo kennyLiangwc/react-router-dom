@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import http from "../../../utils/http"
-import { Table, Button, Modal, message, Input } from "antd"
+import { Table, Button, Modal, message, Input, Card } from "antd"
 import util from "../../../utils/util"
 import InviteState from "../../common/enums/InviteState.js"
 import { addTodo } from "../../actions";
 import { connect } from "react-redux"
+import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
 
 const { Column } = Table;
 const confirm = Modal.confirm;
@@ -18,9 +19,6 @@ class CodeList extends Component {
     componentWillMount() {
         this.query();
         this.props.dispatch(addTodo("1111111"))
-    }
-    onChange() {
-        console.log("onChange")
     }
     page = {
         pageNumber: 1,
@@ -45,6 +43,7 @@ class CodeList extends Component {
             }
           }`;
         http.post(query).then(data => {
+            this.page.total = data.queryInviteTokenList.count
             this.setState({
                 list: data.queryInviteTokenList.list
             })
@@ -116,10 +115,13 @@ class CodeList extends Component {
         }
         return(
             <div>
-                <div style={{margin: "12px 0",borderBottom: "1px solid #1890ff",width: "100px"}}>邀请码列表</div>
-                <Table dataSource={this.state.list} columns={columns} style={{width: "90%", marginLeft: "2%"}} pagination={pagination}>
+                <BreadcrumbCustom first={"邀请码列表"}/>
+                <Card>
+                    <Table dataSource={this.state.list} columns={columns} style={{width: "90%", marginLeft: "2%"}} pagination={pagination}>
                     
-                </Table>
+                    </Table>
+                </Card>
+                
             </div>
         )
     }

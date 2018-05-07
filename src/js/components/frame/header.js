@@ -17,24 +17,24 @@ class Header extends Component {
             id: 2,
             name: "name"
         }))
-        const query = `{
-            getMyUserData {
-              userInfo{
-                uid
-                unionId
-                portrait
-                nickname
-              }
-              isBindInviteToken
-              menus
+        const query = `
+            {
+                getMyUserData{
+                    userInfo{
+                        uid
+                        unionId
+                        nickname
+                        portrait
+                    }
+                }
             }
-          }`;
+        `;
         http.post(query).then(data => {
             this.setState({
                 nickname: data.getMyUserData.userInfo.nickname,
                 nickImg: data.getMyUserData.userInfo.portrait
             });
-
+            this.props.dispatch(addUserInfo(data.getMyUserData.userInfo))
         })
     }
     render() {

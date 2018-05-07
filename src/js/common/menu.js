@@ -40,7 +40,7 @@ let MenuMap = {
                 },
                 {
                     id: "addRole",
-                    text: "新增角色1",
+                    text: "新增角色",
                     path: "/app/role/addRole",
                     isMenu: true,
                     exact: true,
@@ -53,20 +53,7 @@ let MenuMap = {
                 },
                 {
                     id: "updateRole",
-                    text: "修改角色2",
-                    path: "/app/role/editRole",
-                    isMenu: true,
-                    exact: true,
-                    contain: [
-                        {
-                            "name": "新增角色",
-                            "path": "/app/role/editRole"
-                        }
-                    ]
-                },
-                {
-                    id: "updateRole",
-                    text: "修改角色2",
+                    text: "修改角色",
                     path: "/app/role/editRole/:id",
                     isMenu: false,
                     exact: true,
@@ -79,9 +66,9 @@ let MenuMap = {
                 },
                 {
                     id: "delRole",
-                    text: "删除角色3",
+                    text: "删除角色",
                     path: "/app/role/delRole",
-                    isMenu: true,
+                    isMenu: false,
                     exact: true,
                     contain: [
                         {
@@ -92,7 +79,7 @@ let MenuMap = {
                 },
                 {
                     id: "testRole",
-                    text: "测试角色3",
+                    text: "测试角色",
                     path: "/app/role/testRole",
                     isMenu: false,
                     exact: true,

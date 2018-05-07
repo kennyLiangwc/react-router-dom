@@ -1,10 +1,9 @@
 export default (state = {},action) => {
 	switch(action.type) {
 		case "ADD_USER_INFO":
-			console.log(state,action)
 			return {
-				id: action.info.id,
-				name: action.info.name
+				id: action.info.uid,
+				name: action.info.nickname
 			}
 		default: 
 			return state

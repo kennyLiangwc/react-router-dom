@@ -44,7 +44,7 @@ http.post = function(action,params,needLoading = true) {
             if(errors && errors.length > 0) {
                 try {
                     let message = JSON.parse(errors[0].message);
-                    console.log("message",message)
+                    ui.toast("error",message.msg);
                     if(message.ret == -3) {      //未登录
                         ui.toast("error","请重新登录");
                         window.location.replace("#/login")

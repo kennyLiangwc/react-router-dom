@@ -30,6 +30,7 @@ const cookie = {
 let util = {
     getDataFromTime(time) {
         if(!time) return;
+        time = Number(time);
         let data = new Date(time);
         let year = data.getFullYear(),
             month = data.getMonth() + 1,

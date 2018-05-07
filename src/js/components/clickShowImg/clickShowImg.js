@@ -11,9 +11,9 @@ export default class ClickShowImg extends Component {
         if (!isImg) {
             return <a href={realPath} target="blank">查看图片</a>
         }
-		return <img src={commonUtil.dealPicUrl0(src, 180)} style={style} className={className} onClick={this.onClick(src)}/>
+		return <img src={util.dealPicUrl0(src, 180)} style={style} className={className} onClick={this.onClick(src)}/>
 	}
-	onClick() {
+	onClick(src) {
 		return function () {
             window.open(util.dealPicUrl0(src, 0))
         }
