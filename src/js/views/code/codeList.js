@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import http from "../../../utils/http"
-import { Table, Button, Modal, message, Input, Card } from "antd"
+import { Table, Button, Modal, message, Input, Card, Popconfirm } from "antd"
 import util from "../../../utils/util"
 import InviteState from "../../common/enums/InviteState.js"
 import { addTodo } from "../../actions";
@@ -92,8 +92,11 @@ class CodeList extends Component {
                 key: "action",
                 render: (text,record,index) => (
                     <div>
-                        <Button type="danger" onClick={() => this.del(text,record,index)} style={{marginRight: "4px"}}>删除</Button>
-                        <Button type="primary">复制</Button>
+                        <Popconfirm title="Sure to delete?" onConfirm={() => this.del(record, index)}>
+                                <a>Delete</a>
+                        </Popconfirm>
+                        // <Button type="danger" onClick={() => this.del(text,record,index)} style={{marginRight: "4px"}}>删除</Button>
+                        // <Button type="primary">复制</Button>
                     </div>
                 )
             }

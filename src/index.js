@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker';
-
+import { AppContainer } from 'react-hot-loader';
 import { createStore, applyMiddleware } from "redux";
 import thunk from 'redux-thunk';
 import { Provider } from "react-redux";
@@ -54,9 +54,24 @@ console.log(store.getState());
 //   </Switch>
 // </BrowserRouter>
 
+const render = Component => {
+//增加react-hot-loader保持状态刷新操作
+	ReactDOM.render(
+		<AppContainer>
+			<Provider store={store}>
+	            <Component store={store} />
+	        </Provider>
+        </AppContainer>,
+        document.getElementById('root')
+	)
+}
+render(Page);
 
-ReactDOM.render(
-	<Provider store={store}>
-		<Page />
-	</Provider>, document.getElementById('root'));
+if (module.hot) {
+	module.hot.accept('./Page', () => {
+        render(Page);
+    })
+}
+
+
 registerServiceWorker();
