@@ -8,14 +8,18 @@ let role = {
                     queryRoleList(input:$input){
                         name
                         id
-                        description
                     }
                 }
             `;
             http.post(query,{
                 input: {}
             },false).then(data => {
-                reslove(data.queryRoleList)
+                let tempList = data.queryRoleList;
+                tempList.unshift({
+                    name: "请选择",
+                    id: ""
+                })
+                reslove(tempList)
             })
         })
         

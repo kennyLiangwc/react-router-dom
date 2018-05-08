@@ -28,6 +28,35 @@ const cookie = {
     }
 };
 let util = {
+    data(key, value) {
+        if (value === undefined) {
+            // 读取数据
+            var data = null;
+            try {
+                data = decodeURI(localStorage.getItem(key));
+                data = JSON.parse(data);
+            } catch (err) {
+                console.error('取并转化localstorage数据失败', err);
+            }
+            return data;
+        } else if (value === null) {
+            // 删除数据
+            try {
+                localStorage.removeItem(key);
+            } catch (err) {
+                console.error('删除localstorage数据失败', err);
+            }
+
+        } else {
+            // 设置数据
+            try {
+                // console.log(encodeURI)
+                localStorage.setItem(key, encodeURI(JSON.stringify(value)));
+            } catch (error) {
+                console.error('设置localstorage数据失败', error);
+            }
+        }
+    },
     getDataFromTime(time) {
         if(!time) return;
         time = Number(time);
@@ -122,4 +151,4 @@ let util = {
         return src;
     }
 };
-module.exports = util;
+export default util;

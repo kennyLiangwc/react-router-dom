@@ -49,7 +49,8 @@ class SiderCustom extends Component {
 				onClick={this.handleClick.bind(this)}
 				selectedKeys={[this.state.selectedKey]}
 				openKeys={this.state.firstHide ? null : [this.state.openKey]}
-				onOpenChange={this.openMenu}
+                onOpenChange={this.openMenu}
+                style={{minHeight: "820px"}}
 			/>
 
 		)

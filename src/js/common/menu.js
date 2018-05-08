@@ -15,7 +15,8 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            path: "/app/role/userList"
+                            path: "/app/role/userList",
+                            name: "查询用户列表"
                         }
                     ]
                 }
@@ -34,7 +35,16 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            path: "/app/role/roleList"
+                            path: "/app/role/roleList",
+                            name: "查询用户列表"
+                        },
+                        {
+                            path: "/app/role/delRole",
+                            name: "删除角色"
+                        },
+                        {
+                            path: "/app/role/editRole",
+                            name: "修改角色"
                         }
                     ]
                 },
@@ -46,8 +56,8 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            "name": "新增角色",
-                            "path": "/app/role/addRole"
+                            name: "新增角色",
+                            path: "/app/role/addRole"
                         }
                     ]
                 },
@@ -59,46 +69,8 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            "name": "新增角色",
-                            "path": "/app/role/editRole"
-                        }
-                    ]
-                },
-                {
-                    id: "delRole",
-                    text: "删除角色",
-                    path: "/app/role/delRole",
-                    isMenu: false,
-                    exact: true,
-                    contain: [
-                        {
-                            "name": "新增角色",
-                            "path": "/app/role/delRole"
-                        }
-                    ]
-                },
-                {
-                    id: "testRole",
-                    text: "测试角色",
-                    path: "/app/role/testRole",
-                    isMenu: false,
-                    exact: true,
-                    contain: [
-                        {
-                            "name": "新增角色",
-                            "path": "/app/role/testRole"
-                        }
-                    ]
-                },
-                {
-                    id: "Test",
-                    text: "测试",
-                    path: "/app/test/test",
-                    isMenu: false,
-                    exact: true,
-                    contain: [
-                        {
-                            
+                            name: "新增角色",
+                            path: "/app/role/editRole"
                         }
                     ]
                 }
@@ -117,47 +89,25 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            "name": "新增邀请码",
-                            path: "add"
+                            name: "查询邀请码",
+                            path: "/app/role/codeList"
+                        },
+                        {
+                            name: "删除邀请码",
+                            path: "/app/role/delCode"
                         }
                     ]
                 },
                 {
-                    id: "addInvite",
+                    id: "AddInvite",
                     text: "新增邀请码",
                     path: "/app/code/addCode",
                     isMenu: true,
                     exact: true,
                     contain: [
                         {
-                            "name": "新增邀请码",
-                            path: "add"
-                        }
-                    ]
-                },
-                {
-                    id: "updateInvite",
-                    text: "修改邀请码",
-                    path: "/app/code/updateCode",
-                    isMenu: true,
-                    exact: true,
-                    contain: [
-                        {
-                            "name": "新增邀请码",
-                            path: "add"
-                        }
-                    ]
-                },
-                {
-                    id: "delInvite",
-                    text: "删除邀请码",
-                    path: "/app/code/delCode",
-                    isMenu: true,
-                    exact: true,
-                    contain: [
-                        {
-                            "name": "新增邀请码4",
-                            path: "add"
+                            name: "新增邀请码",
+                            path: "/app/role/addCode"
                         }
                     ]
                 }
@@ -271,9 +221,17 @@ function getRouteList() {
     })
     return routeList
 }
+function getRoleCheckList() {
+    MenuMap.role.map(item => {
+        item.children.map(v => {
+            console.log(v)
+        })
+    })
+}
 
 let menuList = getMenuByRightList('role',arr);
 export default {
     getMenuByRightList: getMenuByRightList,
-    getRouteList: getRouteList
+    getRouteList: getRouteList,
+    getRoleCheckList: getRoleCheckList
 }

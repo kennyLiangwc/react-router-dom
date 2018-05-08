@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { Alert, Form , Input, Button, Table, Card, message } from "antd";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import permission from "../../../utils/permission"
 import util from "../../../utils/util"
 import http from "../../../utils/http"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx"
+
 const FormItem = Form.Item;
 
-export default class RoleList extends Component {
+class RoleList extends Component {
     state = {
         list: []
     }
@@ -56,6 +57,10 @@ export default class RoleList extends Component {
             this.query()
         })
     }
+    toEditRole(item) {
+        util.data("editRole",item);
+        this.props.history.push(`/app/role/editRole/${item.id}`)
+    }
     render() {
         const columns = [
             {
@@ -85,8 +90,8 @@ export default class RoleList extends Component {
                 dataIndex: "id",
                 render: (text,record) =>(
                     <div>
-                        <Button onClick={() => this.delRole(record.id)} type="danger">删除</Button>
-                        <Button>修改</Button>
+                        <Button onClick={() => this.delRole(record.id)} type="danger" style={{marginRight: "8px"}}>删除</Button>
+                        <Button type="primary" onClick={() => this.toEditRole(record)}>修改</Button>
                     </div>
                 )
             }
@@ -116,3 +121,4 @@ export default class RoleList extends Component {
         )
     }
 }
+export default withRouter(RoleList)

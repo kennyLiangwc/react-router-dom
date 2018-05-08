@@ -51,8 +51,8 @@ http.post = function(action,params,needLoading = true) {
                     }
                 } catch (error) {
                     console.log("error1",error);
-                    ui.toast("error",errors[0].message);
-                    reject(error)
+                    ui.toast("error",error.message);
+                    // reject(error)
                 }
             }
         })

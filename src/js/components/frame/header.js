@@ -29,6 +29,16 @@ class Header extends Component {
                 }
             }
         `;
+        // const query = `
+        //     query getMyUserData{
+        //             userInfo{
+        //                 uid
+        //                 unionId
+        //                 nickname
+        //                 portrait
+        //             }
+        //         }
+        // `;
         http.post(query).then(data => {
             this.setState({
                 nickname: data.getMyUserData.userInfo.nickname,

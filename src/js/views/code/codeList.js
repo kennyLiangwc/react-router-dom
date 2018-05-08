@@ -1,23 +1,78 @@
 import React, { Component } from "react";
 import http from "../../../utils/http"
-import { Table, Button, Modal, message, Input, Card, Popconfirm } from "antd"
+import { Table, Button, message, Input, Card, Popconfirm, Form, Select } from "antd"
 import util from "../../../utils/util"
 import InviteState from "../../common/enums/InviteState.js"
 import { addTodo } from "../../actions";
 import { connect } from "react-redux"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
+import role from "../../common/role/role"
 
 const { Column } = Table;
-const confirm = Modal.confirm;
+const FormItem = Form.Item;
+const Option = Select.Option;
+
+const CodeForm = Form.create()(class SearchCodeForm extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            roleList: []
+        }
+        role.getRoleList().then(data => {
+            this.setState({
+                roleList: data
+            })
+        })
+    }
+    handleSubmit = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err,values) => {
+            if(!err) {
+                console.log("value",values.role)
+                this.props.query(values.role)
+            }
+        })
+    }
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        return(
+            <Form
+            layout="inline" 
+            onSubmit={this.handleSubmit}
+            >
+                <FormItem
+                    label="角色名称"
+                >
+                    {getFieldDecorator('role')(
+                        <Select
+                        style={{ width: 200 }}
+                        placeholder="请选择一个角色"
+                        >
+                            {
+                                this.state.roleList.map((v,index) => (
+                                    <Option key={index} value={v.id}>{v.name}</Option>
+                                ))
+                            }
+                        </Select>
+                    )}
+                </FormItem>
+                <FormItem>
+                    <Button type="primary" htmlType="submit" >搜索</Button>
+                </FormItem>  
+            </Form>
+        )
+    }
+})
 class CodeList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            list: []
+            list: [],
+            roleId: null
         }
     }
     componentWillMount() {
-        this.query();
+        this.pageQuery();
         this.props.dispatch(addTodo("1111111"))
     }
     page = {
@@ -25,47 +80,48 @@ class CodeList extends Component {
         pageSize: 10,
         total: 0
     }
-    query(pageNumber = 1,pageSize = 10) {
-        const query = `{
-            queryInviteTokenList(roleId: null, page: {pageSize: ${pageSize}, pageNumber: ${pageNumber}}) {
-              count
-              list {
-                token
-                roleId
-                roleName
-                uid
-                state
-                createAt
-                updateAt
-                createUid
-                updateUid
-              }
+    pageQuery(pageNumber = 1,pageSize = 10) {
+        const query = `
+            query QueryInviteTokenList($roleId:Int,$page:PageInput){
+                queryInviteTokenList(roleId:$roleId,page:$page){
+                    count
+                    list{
+                        token
+                        roleName
+                        state
+                        createAt
+                    }
+                }
             }
-          }`;
-        http.post(query).then(data => {
+        `;
+        http.post(query,{
+            roleId: this.params,
+            page: {
+                pageSize: pageSize,
+                pageNumber: pageNumber
+            }
+        }).then(data => {
             this.page.total = data.queryInviteTokenList.count
             this.setState({
                 list: data.queryInviteTokenList.list
             })
         })
     }
-    del(text,record,index) {
-        const self = this;
-        confirm({
-            title: '你确定要删除该邀请码吗?',
-            onOk() {
-                const { token } = record;
-                const query = `mutation {
-                    delInviteToken(token: "${token}") {
-                        ret
-                    }
-                }`;
-                http.post(query).then(data => {
-                    message.success("删除成功");
-                    self.query();
-                })
+    del(record) {
+        const query = `mutation {
+            delInviteToken(token: "${record.token}") {
+                ret
             }
-        });
+        }`;
+        http.post(query).then(data => {
+            message.success("删除成功");
+            this.pageQuery();
+        })
+    }
+    params = null;
+    query(params) {
+        this.params = params == "" ? null : params;
+        this.pageQuery()
     }
     render() {
         const columns = [
@@ -73,6 +129,9 @@ class CodeList extends Component {
                 title: "邀请码",
                 dataIndex: "token",
                 key: "token",
+            },{
+                title: "绑定角色",
+                dataIndex: "roleName"
             },{
                 title: "状态",
                 dataIndex: "state",
@@ -92,11 +151,9 @@ class CodeList extends Component {
                 key: "action",
                 render: (text,record,index) => (
                     <div>
-                        <Popconfirm title="Sure to delete?" onConfirm={() => this.del(record, index)}>
-                                <a>Delete</a>
+                        <Popconfirm title="确定要删除吗?" onConfirm={() => this.del(record)}>
+                                <a className="red">删除</a>
                         </Popconfirm>
-                        // <Button type="danger" onClick={() => this.del(text,record,index)} style={{marginRight: "4px"}}>删除</Button>
-                        // <Button type="primary">复制</Button>
                     </div>
                 )
             }
@@ -120,7 +177,8 @@ class CodeList extends Component {
             <div>
                 <BreadcrumbCustom first={"邀请码列表"}/>
                 <Card>
-                    <Table dataSource={this.state.list} columns={columns} style={{width: "90%", marginLeft: "2%"}} pagination={pagination}>
+                    <CodeForm query={this.query.bind(this)}/>
+                    <Table rowKey="id" dataSource={this.state.list} columns={columns} pagination={pagination}>
                     
                     </Table>
                 </Card>
