@@ -149,6 +149,20 @@ let util = {
             }
         }
         return src;
-    }
+    },
+    /**
+     * 将字典中的key组装成一个数组
+     * 比如{1:true,2:false} 转化成[1]
+     * @param obj
+     */
+    parseMapKeyTrueToArray(obj){
+        var arr = [];
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key) && obj[key]) {
+                arr.push(key);
+            }
+        }
+        return arr
+    },
 };
 export default util;

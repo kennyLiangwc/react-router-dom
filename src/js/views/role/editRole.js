@@ -11,48 +11,48 @@ const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const editRole = util.data("editRole");
 
-console.log("getRoleCheckList",menu.getRoleCheckList())
-const EditRoleForm = Form.create()(class RoleForm extends Component {
-    handleUpdate = (e) => {
-        e.preventDefault();
-        this.props.form.validateFields((err,values) => {
-            if(!err) {
-                this.props.updateRole(values)
-            }
-        })
-    }
-    render() {
-        const { getFieldDecorator } = this.props.form;
-        const { description, name } = editRole;
-        return(
-            <Form
-            layout="inline"
-            >
-                <FormItem
-                label="角色名称"
-                >
-                    {getFieldDecorator('name', {
-                        rules: [{ required: true, message: '角色名不能为空'}],
-                    initialValue: name})(
-                        <Input />  
-                    )}
-                </FormItem>
-                <FormItem
-                label="描述"
-                >
-                    {getFieldDecorator('description', {initialValue: description})(
-                        <Input />  
-                    )}
-                </FormItem>
-                <FormItem>
-                    <Popconfirm title="确定要删除吗?" onConfirm={this.handleUpdate} okText="确定" cancelText="取消">
-                        <a className="blue">修改</a>
-                    </Popconfirm>
-                </FormItem>
-            </Form>
-        )
-    }
-})
+// console.log("getRoleCheckList",menu.getRoleCheckList())
+// const EditRoleForm = Form.create()(class RoleForm extends Component {
+//     handleUpdate = (e) => {
+//         e.preventDefault();
+//         this.props.form.validateFields((err,values) => {
+//             if(!err) {
+//                 this.props.updateRole(values)
+//             }
+//         })
+//     }
+//     render() {
+//         const { getFieldDecorator } = this.props.form;
+//         const { description, name } = editRole;
+//         return(
+//             <Form
+//             layout="inline"
+//             >
+//                 <FormItem
+//                 label="角色名称"
+//                 >
+//                     {getFieldDecorator('name', {
+//                         rules: [{ required: true, message: '角色名不能为空'}],
+//                     initialValue: name})(
+//                         <Input />  
+//                     )}
+//                 </FormItem>
+//                 <FormItem
+//                 label="描述"
+//                 >
+//                     {getFieldDecorator('description', {initialValue: description})(
+//                         <Input />  
+//                     )}
+//                 </FormItem>
+//                 <FormItem>
+//                     <Popconfirm title="确定要删除吗?" onConfirm={this.handleUpdate} okText="确定" cancelText="取消">
+//                         <a className="blue">修改</a>
+//                     </Popconfirm>
+//                 </FormItem>
+//             </Form>
+//         )
+//     }
+// })
 
 export default class EditRole extends Component {
     constructor(props) {
@@ -68,6 +68,8 @@ export default class EditRole extends Component {
             checkedList: [],
             indeterminate: true,
             checkAll: false,
+            selectedMap: {},
+            menuList: menu.getRoleCheckList()
         }
     }
     componentWillMount() {
@@ -118,10 +120,32 @@ export default class EditRole extends Component {
     }
     selectedMap = {}
     isSelected (path) {
-        return !!this.selectedMap[path]
+        return !!this.state.selectedMap[path]
     }
-    select (path) {
-        this.selectedMap[path] = !this.selectedMap[path];
+    select = (path) => {
+        let { selectedMap } = this.state;
+        selectedMap[path] = !selectedMap[path];
+        this.setState({
+            selectedMap
+        })
+    }
+    batSelect = (item,e) => {
+        console.log(item,e);
+        let selectedMap = {}, checked = e.target.checked;
+        item.children.map((c,i) => {
+            c.contain.map((v,n) => {
+                selectedMap[v.path] = checked
+            })
+        });
+        selectedMap = Object.assign({},this.state.selectedMap,selectedMap);
+        this.setState({
+            selectedMap
+        })
+    }
+    add() {
+        const { selectedMap } = this.state;
+        let tempList = util.parseMapKeyTrueToArray(selectedMap);
+        console.log("tempList",tempList)
     }
     render() {
         const tempList = [
@@ -130,11 +154,12 @@ export default class EditRole extends Component {
             {value: 3,label: 3},
             {value: 4,label: 4}
         ]
+        const { menuList } = this.state ,self = this;
+        console.log("menuList",menuList)
         return(
             <div>
                 <BreadcrumbCustom first={"角色列表"} second="修改角色" firstLink="/app/role/roleList"/>
                 <Card>
-                    <EditRoleForm updateRole={this.updateRole.bind(this)}/>
                     {/* This is EdirRole, id is <span className="animated fadeInRight">11111111</span>  {this.state.id} */}
                     <div style={{ borderBottom: '1px solid #E9E9E9' }}>
                         <Checkbox
@@ -145,16 +170,32 @@ export default class EditRole extends Component {
                             Check all
                         </Checkbox>
                     </div>
-                    {/* <span className="ant-checkbox"><input type="checkbox" class="ant-checkbox-inner"/></span> */}
-                    {/* <CheckboxGroup options={tempList} value={tempList.value}></CheckboxGroup> */}
-                    {/* <Checkbox checked={}></Checkbox>     */}
                     {
-                        tempList.map((v,index) => (
-                            <Checkbox value={v.value} key={index}>{v.label}</Checkbox>
-                        ))
+                        menuList.map((item,index) => {
+                            return <div key={index}>
+                                    <Checkbox 
+                                    // indeterminate={self.state.indeterminate}
+                                    onChange={(e) => self.batSelect(item,e)}
+                                    >
+                                    {item.text}
+                                    {
+                                        item.children.map((c,i) => {
+                                            return <div key={i}>
+                                                {
+                                                    c.contain.map((v,n) => {
+                                                        return <Checkbox key={n} value={v.path} checked={self.isSelected(v.path)} onChange={() => self.select(v.path)}>{v.name}</Checkbox >
+                                                    })
+                                                }
+                                            </div>
+                                        })
+                                    }
+                                </Checkbox>
+                            </div>
+                        })
                     }
+
                 </Card>
-                
+                <Button onClick={this.add.bind(this)}>添加</Button>
             </div>
         )
     }
