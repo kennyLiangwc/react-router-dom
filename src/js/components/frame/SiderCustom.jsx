@@ -3,14 +3,29 @@ import { Layout } from 'antd';
 import { withRouter } from 'react-router-dom';
 import menu from '../../common/menu';
 import SiderMenu from './SiderMenu';
+import http from "../../../utils/http"
 
 class SiderCustom extends Component {
 	state = {
         openKey: '',
-        selectedKey: ''
+        selectedKey: '',
+        rightList: []
     };
+    queryMyMenus() {
+        const query = `
+            query queryMyMenus{
+                queryMyMenus
+            }
+        `;
+        http.post(query,{},false).then(data => {
+            this.setState({
+                rightList: data.queryMyMenus
+            })
+        })
+    }
 	componentDidMount() {
         this.setMenuOpen(this.props);
+        this.queryMyMenus()
     }
     componentWillReceiveProps(nextProps) {
         this.setMenuOpen(nextProps)
@@ -41,9 +56,10 @@ class SiderCustom extends Component {
         })
     };
 	render() {
+        const { rightList } = this.state;
 		return (
 			<SiderMenu
-				menus={menu.getMenuByRightList("role")}
+				menus={menu.getMenuByRightList("role",this.state.rightList)}
 				theme="dark"
 				mode="inline"
 				onClick={this.handleClick.bind(this)}

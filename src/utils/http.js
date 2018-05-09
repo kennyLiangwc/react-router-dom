@@ -25,8 +25,10 @@ const client = new GraphQLClient('/api/mis', {
 
 let http = {};
 
+showLoading(false);
 http.post = function(action,params,needLoading = true) {
     showLoading(needLoading);
+    
     const client = new GraphQLClient('/api/mis', {
         headers: {
             Authorization: JwtToken,
@@ -52,7 +54,6 @@ http.post = function(action,params,needLoading = true) {
                 } catch (error) {
                     console.log("error1",error);
                     ui.toast("error",error.message);
-                    // reject(error)
                 }
             }
         })

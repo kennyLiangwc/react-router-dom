@@ -80,7 +80,8 @@ class CodeList extends Component {
         pageSize: 10,
         total: 0
     }
-    pageQuery(pageNumber = 1,pageSize = 10) {
+    pageQuery() {
+        const { pageNumber, pageSize } = this.page;
         const query = `
             query QueryInviteTokenList($roleId:Int,$page:PageInput){
                 queryInviteTokenList(roleId:$roleId,page:$page){
@@ -119,7 +120,7 @@ class CodeList extends Component {
         })
     }
     params = null;
-    query(params) {
+    query = (params) => {
         this.params = params == "" ? null : params;
         this.pageQuery()
     }
@@ -166,11 +167,11 @@ class CodeList extends Component {
             onShowSizeChange: (pageNumber,pageSize) => {
                 this.page.pageNumber = pageNumber;
                 this.page.pageSize = pageSize;
-                this.query(pageNumber,pageSize)
+                this.pageQuery()
             },
             onChange: (current) => {
                 this.page.pageNumber = current;
-                this.query(current)
+                this.pageQuery(current)
             }
         }
         return(

@@ -170,14 +170,10 @@ let arr = [
 
 
 function getMenuByRightList(module, rightList) {
-    if(window.location.hostname !== 'txent.qq.com') {
-        return MenuMap[module]; // XXX 开发用
-    }
     const roleList = rightList;
     let menuList = MenuMap[module]; // 此时为数组, role等;
-    console.log()
     const tempRightList = roleList.map(function(v) {
-        return v.path;
+        return v;
     }); // 把对象降维到数组
     if (!menuList) {
         console.error('错误模块', module);
@@ -195,6 +191,7 @@ function getMenuByRightList(module, rightList) {
         });
         if (menu2Arr.length > 0) {
             resultList.push({
+                id: menu1.id,
                 text: menu1.text,
                 icon:menu1.icon,
                 children: menu2Arr
@@ -206,7 +203,7 @@ function getMenuByRightList(module, rightList) {
 
 
 function getRouteList() {
-    let routeList = [], menuList = getMenuByRightList('role',arr);
+    let routeList = [], menuList = MenuMap.role;
     menuList.map(({children}) => {
         children.map(({id,path,exact}) => {
             routeList.push({
@@ -219,15 +216,9 @@ function getRouteList() {
     return routeList
 }
 function getRoleCheckList() {
-    // MenuMap.role.map(item => {
-    //     item.children.map(v => {
-    //         console.log(v)
-    //     })
-    // })
     return MenuMap.role;
 }
 
-let menuList = getMenuByRightList('role',arr);
 export default {
     getMenuByRightList: getMenuByRightList,
     getRouteList: getRouteList,

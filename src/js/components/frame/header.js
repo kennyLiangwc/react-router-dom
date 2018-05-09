@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import http from "../../../utils/http.js"
-import { Row, Col } from "antd"
+import { Row, Col, Avatar } from "antd"
 import { connect } from "react-redux"
 import { addUserInfo } from "../../actions/index"
 
@@ -12,13 +12,9 @@ class Header extends Component {
             nickImg: ""
         }
     }
-    componentWillMount() {
-        this.props.dispatch(addUserInfo({
-            id: 2,
-            name: "name"
-        }))
+    queryUserInfo() {
         const query = `
-            {
+            query getMyUserData{
                 getMyUserData{
                     userInfo{
                         uid
@@ -26,26 +22,24 @@ class Header extends Component {
                         nickname
                         portrait
                     }
+                    menus
                 }
             }
         `;
-        // const query = `
-        //     query getMyUserData{
-        //             userInfo{
-        //                 uid
-        //                 unionId
-        //                 nickname
-        //                 portrait
-        //             }
-        //         }
-        // `;
-        http.post(query).then(data => {
+        http.post(query,{},false).then(data => {
             this.setState({
                 nickname: data.getMyUserData.userInfo.nickname,
                 nickImg: data.getMyUserData.userInfo.portrait
             });
             this.props.dispatch(addUserInfo(data.getMyUserData.userInfo))
         })
+    }
+    componentWillMount() {
+        this.props.dispatch(addUserInfo({
+            id: 2,
+            name: "name"
+        }))
+        this.queryUserInfo();
     }
     render() {
         return(
@@ -56,7 +50,7 @@ class Header extends Component {
                 <Col span={4} offset={16}>
                     <span>欢迎回来：</span>
                     <span>{this.state.nickname}</span>
-                    <span><img src={this.state.nickImg} style={{width: "50px", borderRadius: "50px", marginLeft: "6px"}}/></span>
+                    <span><img src={this.state.nickImg} style={{width: "40px", borderRadius: "40px", marginLeft: "6px"}}/></span>
                 </Col>
             </div>
         )

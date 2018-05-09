@@ -3,6 +3,7 @@ import NotFound from './js/components/pages/NotFound';
 import Login from './js/components/pages/Login';
 import App from './js/App';
 import React, { Component } from "react";
+import BindInvite from "./js/components/pages/bindInvite"
 
 export default () => (
 	<HashRouter>
@@ -11,6 +12,7 @@ export default () => (
 			<Route path="/app" component={App}></Route>
 			<Route path="/login" component={Login}></Route>
 			<Route path="/404" component={NotFound}></Route>
+			<Route path="/bindInvite" component={BindInvite}></Route>
 			<Route component={NotFound} />} />
 		</Switch>
 	</HashRouter>

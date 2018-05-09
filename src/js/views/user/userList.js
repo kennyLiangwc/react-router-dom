@@ -1,11 +1,14 @@
 import React, { Component } from "react"
 import http from "../../../utils/http"
-import { Table, Row, Col, Card, Form, Input, Button } from "antd";
+import { Table, Row, Col, Card, Form, Input, Button, Modal, Checkbox, message } from "antd";
 import { connect } from "react-redux"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx";
 import ClickShowImg from "../../components/clickShowImg/clickShowImg"
+import role from "../../common/role/role"
+import util from "../../../utils/util"
 
 const FormItem = Form.Item;
+const CheckboxGroup = Checkbox.Group;
 
 const UserForm = Form.create()(class SearchForm extends Component {
     handleSearch(e) {
@@ -59,22 +62,59 @@ const UserForm = Form.create()(class SearchForm extends Component {
     }
 })
 
+class UserRole extends Component {
+    state = {
+        selectedMap: {} 
+    }
+    componentWillMount() {
+        const { selectedMap } = this.state, { userRoleList } = this.props;
+        userRoleList.map(v => {
+            selectedMap[v.roleId] = true;
+        })
+        this.setState({
+            selectedMap
+        });
+    }
+    isSelected (id) {
+        return !!this.state.selectedMap[id]
+    }
+    select = (id) => {
+        let { selectedMap } = this.state;
+        selectedMap[id] = !selectedMap[id];
+        this.setState({
+            selectedMap
+        });
+        let tempList = util.parseMapKeyTrueToArray(this.state.selectedMap);
+        this.props.setRoleList(tempList);
+    }
+    render() {
+        const { roleList } = this.props;
+        return(
+            <div>
+                {
+                    roleList.map((v,index) => {
+                        return <Checkbox key={index} value={v.id} onChange={() => this.select(v.id)} checked={this.isSelected(v.id)}>{v.name}</Checkbox>
+                    })
+                }
+            </div>
+        )
+    }
+} 
 
 class UserList extends Component {
     state = {
-        list: []
+        list: [],
+        userRoleVisible: false,
+        userRoleList: []
     }
     page = {
         pageNumber: 1,
         pageSize: 10,
         count: 0
     }
-    constructor(props) {
-        super(props);
-    }
-    componentWillMount() {
+    componentDidMount() {
         this.pageQuery();
-        console.log("props",this.props)
+        this.queryRoleList()
     }
     pageQuery() {
         const { pageNumber, pageSize } = this.page;
@@ -114,6 +154,69 @@ class UserList extends Component {
         this.params = params;
         this.pageQuery()
     }
+    toViewUserRole = (id) => {
+        this.queryUserRole(id)
+    }
+    queryUserRole(id) {
+        const query = `
+            query queryUserRoles($id:ID!) {
+                queryUserRoles(id:$id){
+                    roleId
+                }
+            }
+        `;
+        http.post(query,{
+            id: id
+        }).then(data => {
+            this.setState({
+                userRoleList: data.queryUserRoles,
+                id,
+                userRoleVisible: true
+            })
+        })
+    }
+    queryRoleList() {
+        let roleList = [];
+        role.getRoleList(true).then(data => {
+            roleList = data;
+            this.setState({
+                roleList
+            });
+        })
+    }
+    setRoleList (list) {
+        this.setState({
+            setRoleList: list
+        })
+    }
+    handleOk = (roles) => {
+        const { id, setRoleList } = this.state;
+        if(setRoleList) {
+            const query = `
+                mutation UpdateUserRole($id:ID!,$roles:[ID]){
+                    updateUserRole(id:$id,roles:$roles){
+                        ret
+                        msg
+                    }
+                }
+            `;
+            http.post(query,{
+                id: id,
+                roles: setRoleList
+            }).then(() => {
+                message.success("修改成功")
+            })
+        }
+        this.setState({
+            userRoleVisible: false
+        });
+    }
+    handleCancel = (e) => {
+        e.preventDefault();
+        this.setState({
+            userRoleVisible: false
+        })
+    }
     render() {
         const pagination = {
             total: this.page.total,
@@ -147,17 +250,32 @@ class UserList extends Component {
             },{
                 title: "unionId",
                 dataIndex: "unionId"
+            },{
+                title: "操作",
+                dataIndex: "",
+                render: (text,record) => (
+                    <Button onClick={() => this.toViewUserRole(record.uid)}>查看角色</Button>
+                )
             }
         ]
+        const { list, userRoleVisible, id, roleList, userRoleList } = this.state;
         return(
             <div className="gutter-example">
                 <Row gutter={16}>
                      <BreadcrumbCustom first={"用户列表"}/>
                      <UserForm query={this.query.bind(this)}/>
                      <Card bordered={false}>
-                        <Table dataSource={this.state.list} columns={columns} pagination={pagination} rowKey="userTable"></Table>
+                        <Table dataSource={list} columns={columns} pagination={pagination} rowKey="userTable"></Table>
                      </Card>
                 </Row>
+                <Modal
+                    title="查看用户角色"
+                    visible={userRoleVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <UserRole id={id} roleList={roleList} userRoleList={userRoleList} setRoleList={this.setRoleList.bind(this)}/>
+                </Modal>
             </div>
         )
     }

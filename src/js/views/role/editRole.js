@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
-import { Card, Form, Input, Button, message, Popconfirm, Checkbox } from "antd"
+import { Card, Form, Input, Button, message, Popconfirm, Checkbox, Row } from "antd"
 import http from "../../../utils/http"
 import util from "../../../utils/util"
 import menu from "../../common/menu"
@@ -11,48 +11,47 @@ const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const editRole = util.data("editRole");
 
-// console.log("getRoleCheckList",menu.getRoleCheckList())
-// const EditRoleForm = Form.create()(class RoleForm extends Component {
-//     handleUpdate = (e) => {
-//         e.preventDefault();
-//         this.props.form.validateFields((err,values) => {
-//             if(!err) {
-//                 this.props.updateRole(values)
-//             }
-//         })
-//     }
-//     render() {
-//         const { getFieldDecorator } = this.props.form;
-//         const { description, name } = editRole;
-//         return(
-//             <Form
-//             layout="inline"
-//             >
-//                 <FormItem
-//                 label="角色名称"
-//                 >
-//                     {getFieldDecorator('name', {
-//                         rules: [{ required: true, message: '角色名不能为空'}],
-//                     initialValue: name})(
-//                         <Input />  
-//                     )}
-//                 </FormItem>
-//                 <FormItem
-//                 label="描述"
-//                 >
-//                     {getFieldDecorator('description', {initialValue: description})(
-//                         <Input />  
-//                     )}
-//                 </FormItem>
-//                 <FormItem>
-//                     <Popconfirm title="确定要删除吗?" onConfirm={this.handleUpdate} okText="确定" cancelText="取消">
-//                         <a className="blue">修改</a>
-//                     </Popconfirm>
-//                 </FormItem>
-//             </Form>
-//         )
-//     }
-// })
+const EditRoleForm = Form.create()(class RoleForm extends Component {
+    handleUpdate = (e) => {
+        e.preventDefault();
+        this.props.form.validateFields((err,values) => {
+            if(!err) {
+                this.props.updateRole(values)
+            }
+        })
+    }
+    render() {
+        const { getFieldDecorator } = this.props.form;
+        const { description, name } = editRole;
+        return(
+            <Form
+            layout="inline"
+            >
+                <FormItem
+                label="角色名称"
+                >
+                    {getFieldDecorator('name', {
+                        rules: [{ required: true, message: '角色名不能为空'}],
+                    initialValue: name})(
+                        <Input />  
+                    )}
+                </FormItem>
+                <FormItem
+                label="描述"
+                >
+                    {getFieldDecorator('description', {initialValue: description})(
+                        <Input />  
+                    )}
+                </FormItem>
+                <FormItem>
+                    <Popconfirm title="确定要删除吗?" onConfirm={this.handleUpdate} okText="确定" cancelText="取消">
+                        <a className="blue">修改</a>
+                    </Popconfirm>
+                </FormItem>
+            </Form>
+        )
+    }
+})
 
 export default class EditRole extends Component {
     constructor(props) {
@@ -76,7 +75,6 @@ export default class EditRole extends Component {
         this.queryRoleMenus()
     }
     updateRole(values) {
-        console.log("values",values)
         const query = `
             mutation UpdateRole($id:ID!,$input:RoleInput){
                 updateRole(id:$id,input:$input){
@@ -101,19 +99,24 @@ export default class EditRole extends Component {
         })
     }
     queryRoleMenus() {
+        const { selectedMap, id } = this.state;
         const query = `
             query queryRoleMenus($id:ID!) {
                 queryRoleMenus(id:$id)
             }
         `;
         http.post(query,{
-            id: this.state.id
+            id: id
         }).then(data => {
-            console.log(data)
+            data.queryRoleMenus.map(v => {
+                selectedMap[v] = true;
+            })
+            this.setState({
+                selectedMap
+            })
         })
     }
     onCheckAllChange = (e) => {
-        console.log(e.target.checked)
         this.setState({
             checkAll: e.target.checked
         })
@@ -130,7 +133,6 @@ export default class EditRole extends Component {
         })
     }
     batSelect = (item,e) => {
-        console.log(item,e);
         let selectedMap = {}, checked = e.target.checked;
         item.children.map((c,i) => {
             c.contain.map((v,n) => {
@@ -142,10 +144,24 @@ export default class EditRole extends Component {
             selectedMap
         })
     }
-    add() {
-        const { selectedMap } = this.state;
+    updateRoleMenu = () => {
+        const { selectedMap } = this.state, { id } = this.state;
         let tempList = util.parseMapKeyTrueToArray(selectedMap);
-        console.log("tempList",tempList)
+        const query = `
+            mutation UpdateRoleMenu($id:ID!,$menus:[String]){
+                updateRoleMenu(id:$id,menus:$menus){
+                    ret
+                    msg
+                }
+            }
+        `;
+        http.post(query,{
+            id: id,
+            menus: tempList
+        }).then(() => {
+            this.queryRoleMenus();
+            message.success("修改成功")
+        })
     }
     render() {
         const tempList = [
@@ -155,47 +171,39 @@ export default class EditRole extends Component {
             {value: 4,label: 4}
         ]
         const { menuList } = this.state ,self = this;
-        console.log("menuList",menuList)
         return(
             <div>
                 <BreadcrumbCustom first={"角色列表"} second="修改角色" firstLink="/app/role/roleList"/>
                 <Card>
-                    {/* This is EdirRole, id is <span className="animated fadeInRight">11111111</span>  {this.state.id} */}
-                    <div style={{ borderBottom: '1px solid #E9E9E9' }}>
-                        <Checkbox
-                            indeterminate={this.state.indeterminate}
-                            onChange={this.onCheckAllChange}
-                            checked={this.state.checkAll}
-                        >
-                            Check all
-                        </Checkbox>
-                    </div>
+                    <EditRoleForm updateRole={this.updateRole.bind(this)}/>
+                    <div style={{ borderBottom: '1px solid #E9E9E9', margin: "10px 0"}}></div>
                     {
                         menuList.map((item,index) => {
-                            return <div key={index}>
+                            return <div key={index} style={{margin: "12px"}}>
                                     <Checkbox 
-                                    // indeterminate={self.state.indeterminate}
                                     onChange={(e) => self.batSelect(item,e)}
                                     >
                                     {item.text}
-                                    {
-                                        item.children.map((c,i) => {
-                                            return <div key={i}>
-                                                {
-                                                    c.contain.map((v,n) => {
-                                                        return <Checkbox key={n} value={v.path} checked={self.isSelected(v.path)} onChange={() => self.select(v.path)}>{v.name}</Checkbox >
-                                                    })
-                                                }
-                                            </div>
-                                        })
-                                    }
+                                    <Row>
+                                        {
+                                            item.children.map((c,i) => {
+                                                return <span key={i}>
+                                                    {
+                                                        c.contain.map((v,n) => {
+                                                            return <Checkbox key={n} value={v.path} checked={self.isSelected(v.path)} onChange={() => self.select(v.path)} style={{margin: "10px"}}>{v.name}</Checkbox >
+                                                        })
+                                                    }
+                                                </span>
+                                            })
+                                        }
+                                    </Row>
+                                    
                                 </Checkbox>
                             </div>
                         })
                     }
-
+                    <Button onClick={this.updateRoleMenu}>修改</Button>
                 </Card>
-                <Button onClick={this.add.bind(this)}>添加</Button>
             </div>
         )
     }

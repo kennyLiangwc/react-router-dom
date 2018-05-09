@@ -59,6 +59,7 @@ class RoleList extends Component {
     }
     toEditRole(item) {
         util.data("editRole",item);
+        this.props.history.push(`/app/role/editRole/${item.id}`)
     }
     render() {
         const columns = [

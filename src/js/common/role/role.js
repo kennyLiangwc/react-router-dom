@@ -1,7 +1,7 @@
 import http from "../../../utils/http"
 
 let role = {
-    getRoleList() {
+    getRoleList(noUnshift) {
         return new Promise((reslove,reject) => {
             const query = `
                 query QueryRoleList($input:RoleInput){
@@ -15,10 +15,12 @@ let role = {
                 input: {}
             },false).then(data => {
                 let tempList = data.queryRoleList;
-                tempList.unshift({
-                    name: "请选择",
-                    id: ""
-                })
+                if(!noUnshift) {
+                    tempList.unshift({
+                        name: "请选择",
+                        id: ""
+                    })
+                }
                 reslove(tempList)
             })
         })
