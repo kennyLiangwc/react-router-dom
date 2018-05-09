@@ -26,12 +26,14 @@ class App extends Component {
           <Sider>
             <SiderCustom />
           </Sider>
-          <Content style={{margin: "10px"}}>
+          <Content style={{margin: "12px"}}>
             {/* 动态替换conten里的内容 */}
             <Routes />
           </Content>
         </Layout>
-        <Footer>Footer</Footer>
+        <Footer style={{ textAlign: 'center' }}>
+            互联网+影视管理平台 ©2018 Created by 腾讯影业
+        </Footer>
       </Layout>
     );
   }

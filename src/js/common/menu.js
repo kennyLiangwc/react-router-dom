@@ -4,7 +4,7 @@ let MenuMap = {
     role: [
         {
             text: "用户管理",
-            icon: "icon_role",
+            icon: "idcard",
             id: "user",
             children: [
                 {
@@ -24,7 +24,7 @@ let MenuMap = {
         },
         {
             text: "角色管理",
-            icon: "icon_role",
+            icon: "user",
             id: "role",
             children: [
                 {
@@ -75,7 +75,7 @@ let MenuMap = {
         },
         {
             text: "邀请码管理",
-            icon: "",
+            icon: "code",
             id: "code",
             children: [
                 {
@@ -170,6 +170,7 @@ let arr = [
 
 
 function getMenuByRightList(module, rightList) {
+    return MenuMap[module]
     const roleList = rightList;
     let menuList = MenuMap[module]; // 此时为数组, role等;
     const tempRightList = roleList.map(function(v) {

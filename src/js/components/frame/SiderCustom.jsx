@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout } from 'antd';
+import { Layout, Icon, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import menu from '../../common/menu';
 import SiderMenu from './SiderMenu';
@@ -7,6 +7,7 @@ import http from "../../../utils/http"
 
 class SiderCustom extends Component {
 	state = {
+        collapsed: false,
         openKey: '',
         selectedKey: '',
         rightList: []
@@ -28,6 +29,7 @@ class SiderCustom extends Component {
         this.queryMyMenus()
     }
     componentWillReceiveProps(nextProps) {
+        this.toggleCollapsed(nextProps.collapsed);
         this.setMenuOpen(nextProps)
     }
  	setMenuOpen = props => {
@@ -44,6 +46,11 @@ class SiderCustom extends Component {
 			openKey: e.keyPath[1]
 		})
 	};
+    toggleCollapsed = e => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    }
 	menuClick = e => {
         this.setState({
             selectedKey: e.key
@@ -58,17 +65,23 @@ class SiderCustom extends Component {
 	render() {
         const { rightList } = this.state;
 		return (
+            <div>
+                <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
+                    <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
+                </Button>
 			<SiderMenu
+                inlineCollapsed="true"
 				menus={menu.getMenuByRightList("role",this.state.rightList)}
 				theme="dark"
-				mode="inline"
+				mode="vertical"
 				onClick={this.handleClick.bind(this)}
 				selectedKeys={[this.state.selectedKey]}
 				openKeys={this.state.firstHide ? null : [this.state.openKey]}
                 onOpenChange={this.openMenu}
                 style={{minHeight: "820px"}}
 			/>
-
+            
+            </div>
 		)
 	}
 }

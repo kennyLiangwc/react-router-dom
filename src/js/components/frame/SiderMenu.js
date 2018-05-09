@@ -18,9 +18,13 @@ const renderSubMenu = (
 		<Menu.SubMenu 
 			key={id}
 			{...props}
-			title={text}
+			title={
+				<span>
+                    {icon && <Icon type={icon} />}
+                    <span className="nav-text">{text}</span>
+                </span>
+			}
 		>
-		{/* { children.filter(item => item.isMenurenderMenuItem(item)) } */}
 		
 		{ children.map(item =>renderMenuItem(item)) }
 		</Menu.SubMenu>
