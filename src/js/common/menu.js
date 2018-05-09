@@ -68,10 +68,7 @@ let MenuMap = {
                     isMenu: false,
                     exact: true,
                     contain: [
-                        {
-                            name: "新增角色",
-                            path: "/app/role/editRole"
-                        }
+                        
                     ]
                 }
             ]
@@ -222,11 +219,12 @@ function getRouteList() {
     return routeList
 }
 function getRoleCheckList() {
-    MenuMap.role.map(item => {
-        item.children.map(v => {
-            console.log(v)
-        })
-    })
+    // MenuMap.role.map(item => {
+    //     item.children.map(v => {
+    //         console.log(v)
+    //     })
+    // })
+    return MenuMap.role;
 }
 
 let menuList = getMenuByRightList('role',arr);
