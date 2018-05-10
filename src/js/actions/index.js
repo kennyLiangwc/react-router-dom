@@ -32,7 +32,6 @@ Object.keys(MenuMap).map((key) => {
 		})
 	})
 })
-console.log("permissionArr",permissionArr,permissionObj)
 let nextTodoId = 0;
 
 export const addTodo = text => ({
@@ -53,13 +52,18 @@ export const addUserInfo = info => ({
 // })
 
 export const addMyMenus = myMenus => {
-	console.log("myMenus",myMenus);
 	roleList = myMenus;
 	return {
 		type: "ADD_MY_MENUS",
 		myMenus
 	}
 }
+
+export const setAuth = (menuList,roleList) => ({
+	type: "SET_AUTH",
+	menuList,
+	roleList
+})
 
 export function getRoleList() {
 	return dispatch => {

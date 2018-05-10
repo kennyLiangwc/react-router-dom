@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import http from "../../../utils/http.js"
 import { Col } from "antd"
 import { connect } from "react-redux"
-import { addUserInfo, getRoleList } from "../../actions/index"
+import { addUserInfo, getRoleList, setAuth } from "../../actions/index"
 
 class Header extends Component {
     constructor(props) {
@@ -40,7 +40,26 @@ class Header extends Component {
         this.props.dispatch(addUserInfo({
             id: 2,
             name: "name"
-        }))
+        }));
+        let menuList = [
+            {
+                path: "/app/role/userList1",
+                name: "查询用户列表",
+                permissionName: "queryUserList1"
+            },
+            {
+                path: "/app/role/userList2",
+                name: "查询用户列表",
+                permissionName: "queryUserList2"
+            },
+            {
+                path: "/app/role/userList4",
+                name: "查询用户列表",
+                permissionName: "queryUserList4"
+            }
+        ];
+        let roleList = ["/app/role/userList1","/app/role/userList2","/app/role/userList3"]
+        this.props.dispatch(setAuth(menuList,roleList))
         this.queryUserInfo();
     }
     render() {
