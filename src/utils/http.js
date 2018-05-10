@@ -1,8 +1,7 @@
 import util from "./util"
 import StaticCommonConst from "./StaticCommonConst"
 import CSRFToken from "./CSRFToken"
-import {request, GraphQLClient} from "graphql-request"
-import { message } from 'antd';
+import { GraphQLClient } from "graphql-request"
 import ui from "./ui"
 
 

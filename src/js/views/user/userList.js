@@ -1,15 +1,12 @@
 import React, { Component } from "react"
 import http from "../../../utils/http"
-import { Table, Row, Col, Card, Form, Input, Button, Modal, Checkbox, message } from "antd";
+import { Table, Row, Card, Form, Input, Button, Modal, Checkbox, message } from "antd";
 import { connect } from "react-redux"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx";
-import ClickShowImg from "../../components/clickShowImg/clickShowImg"
 import role from "../../common/role/role"
 import util from "../../../utils/util"
 
 const FormItem = Form.Item;
-const CheckboxGroup = Checkbox.Group;
-
 const UserForm = Form.create()(class SearchForm extends Component {
     handleSearch(e) {
         e.preventDefault();

@@ -1,19 +1,17 @@
 import React, { Component } from "react";
-import { Alert, Form , Input, Button, Table, Card, message } from "antd";
-import { Link, withRouter } from "react-router-dom";
+import { Button, Table, Card, message, Modal } from "antd";
+import { withRouter } from "react-router-dom";
 import permission from "../../../utils/permission"
 import util from "../../../utils/util"
 import http from "../../../utils/http"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx"
 
-const FormItem = Form.Item;
+
 
 class RoleList extends Component {
     state = {
-        list: []
-    }
-    constructor(props) {
-        super(props);
+        list: [],
+        delRoleVisible: false
     }
     componentDidMount() {
         this.query()
@@ -45,21 +43,35 @@ class RoleList extends Component {
         total: 10
     }
     delRole(id) {
+        this.setState({
+            id,
+            delRoleVisible: true
+        })
+    }
+    toEditRole(item) {
+        util.data("editRole",item);
+        this.props.history.push(`/app/role/editRole/${item.id}`)
+    }
+    handleCancel = e => {
+        this.setState({
+            delRoleVisible: false
+        })
+    }
+    handleOk = e => {
         const query = `mutation DelRole($id:ID!){
             delRole(id:$id){
                 ret
             }
         }`;
         http.post(query,{
-            id: id
+            id: this.state.id
         }).then(() => {
             message.success("删除成功");
+            this.setState({
+                delRoleVisible: false
+            })
             this.query()
         })
-    }
-    toEditRole(item) {
-        util.data("editRole",item);
-        this.props.history.push(`/app/role/editRole/${item.id}`)
     }
     render() {
         const columns = [
@@ -111,11 +123,20 @@ class RoleList extends Component {
                 this.query(current)
             }
         }
+        const { delRoleVisible, list } = this.state;
         return (
             <div>
+                <Modal
+                    title="删除角色"
+                    visible={delRoleVisible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                >
+                    <p>确定要删除该角色吗？</p>
+                </Modal>
                 <BreadcrumbCustom first={"角色列表"}/>
                 <Card>
-                    <Table columns={columns} dataSource={this.state.list}></Table>
+                    <Table columns={columns} dataSource={list} pagination={pagination}></Table>
                 </Card>
             </div>
         )

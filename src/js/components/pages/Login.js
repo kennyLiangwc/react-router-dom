@@ -5,6 +5,6 @@ export default class Login extends Component {
 		ui.showWxLogin()
 	}
 	render() {
-		return <div>Login</div>
+		return <div></div>
 	}
 }

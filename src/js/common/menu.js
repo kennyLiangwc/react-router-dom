@@ -16,7 +16,8 @@ let MenuMap = {
                     contain: [
                         {
                             path: "/app/role/userList",
-                            name: "查询用户列表"
+                            name: "查询用户列表",
+                            permissionName: "queryUserList"
                         }
                     ]
                 }
@@ -36,15 +37,18 @@ let MenuMap = {
                     contain: [
                         {
                             path: "/app/role/roleList",
-                            name: "查询用户列表"
+                            name: "查询用户列表",
+                            permissionName: "queryUserList"
                         },
                         {
                             path: "/app/role/delRole",
-                            name: "删除角色"
+                            name: "删除角色",
+                            permissionName: "queryUserList"
                         },
                         {
                             path: "/app/role/editRole",
-                            name: "修改角色"
+                            name: "修改角色",
+                            permissionName: "queryUserList"
                         }
                     ]
                 },
@@ -57,7 +61,8 @@ let MenuMap = {
                     contain: [
                         {
                             name: "新增角色",
-                            path: "/app/role/addRole"
+                            path: "/app/role/addRole",
+                            permissionName: "queryUserList"
                         }
                     ]
                 },
@@ -87,11 +92,13 @@ let MenuMap = {
                     contain: [
                         {
                             name: "查询邀请码",
-                            path: "/app/role/codeList"
+                            path: "/app/role/codeList",
+                            permissionName: "queryUserList"
                         },
                         {
                             name: "删除邀请码",
-                            path: "/app/role/delCode"
+                            path: "/app/role/delCode",
+                            permissionName: "queryUserList"
                         }
                     ]
                 },
@@ -104,49 +111,8 @@ let MenuMap = {
                     contain: [
                         {
                             name: "新增邀请码",
-                            path: "/app/role/addCode"
-                        }
-                    ]
-                }
-            ]
-        }
-    ],
-    operation: [
-        {
-            text: "邀请码管理666",
-            icon: "",
-            children: [
-                
-                {
-                    id: "addInvite2",
-                    text: "新增邀请码2",
-                    path: "2",
-                    contain: [
-                        {
-                            "name": "新增邀请码",
-                            path: "add"
-                        }
-                    ]
-                },
-                {
-                    id: "updateInvite",
-                    text: "修改邀请码3",
-                    path: "3",
-                    contain: [
-                        {
-                            "name": "新增邀请码",
-                            path: "add"
-                        }
-                    ]
-                },
-                {
-                    id: "delInvite",
-                    text: "删除邀请码",
-                    path: "4",
-                    contain: [
-                        {
-                            "name": "新增邀请码4",
-                            path: "add"
+                            path: "/app/role/addCode",
+                            permissionName: "queryUserList"
                         }
                     ]
                 }
@@ -157,16 +123,6 @@ let MenuMap = {
 
 
 
-let arr = [
-	{
-        path: "/app/role/roleList",
-        name: "角色列表"
-    },
-    {
-        path: "/app/role/addRole",
-        name: "新增角色"
-    }
-];
 
 
 function getMenuByRightList(module, rightList) {
@@ -223,5 +179,6 @@ function getRoleCheckList() {
 export default {
     getMenuByRightList: getMenuByRightList,
     getRouteList: getRouteList,
-    getRoleCheckList: getRoleCheckList
+    getRoleCheckList: getRoleCheckList,
+    MenuMap
 }

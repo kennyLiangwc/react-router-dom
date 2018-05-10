@@ -4,6 +4,8 @@ import { withRouter } from 'react-router-dom';
 import menu from '../../common/menu';
 import SiderMenu from './SiderMenu';
 import http from "../../../utils/http"
+import { addMyMenus } from "../../actions"
+import { connect } from "react-redux"
 
 class SiderCustom extends Component {
 	state = {
@@ -21,7 +23,8 @@ class SiderCustom extends Component {
         http.post(query,{},false).then(data => {
             this.setState({
                 rightList: data.queryMyMenus
-            })
+            });
+            this.props.dispatch(addMyMenus(data.queryMyMenus))
         })
     }
 	componentDidMount() {
@@ -62,27 +65,26 @@ class SiderCustom extends Component {
             firstHide: false,
         })
     };
+    toggle = e => {
+
+    }
 	render() {
         const { rightList } = this.state;
 		return (
             <div>
-                <Button type="primary" onClick={this.toggleCollapsed} style={{ marginBottom: 16 }}>
-                    <Icon type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'} />
-                </Button>
-			<SiderMenu
-                inlineCollapsed="true"
-				menus={menu.getMenuByRightList("role",this.state.rightList)}
-				theme="dark"
-				mode="vertical"
-				onClick={this.handleClick.bind(this)}
-				selectedKeys={[this.state.selectedKey]}
-				openKeys={this.state.firstHide ? null : [this.state.openKey]}
-                onOpenChange={this.openMenu}
-                style={{minHeight: "820px"}}
-			/>
+                <SiderMenu
+                    menus={menu.getMenuByRightList("role",this.state.rightList)}
+                    theme="light"
+                    mode="inline"
+                    onClick={this.handleClick.bind(this)}
+                    selectedKeys={[this.state.selectedKey]}
+                    openKeys={this.state.firstHide ? null : [this.state.openKey]}
+                    onOpenChange={this.openMenu}
+                    style={{minHeight: "820px"}}
+                />
             
             </div>
 		)
 	}
 }
-export default withRouter(SiderCustom)
+export default connect()(withRouter(SiderCustom))

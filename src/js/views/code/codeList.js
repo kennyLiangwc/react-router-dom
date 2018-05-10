@@ -1,29 +1,16 @@
 import React, { Component } from "react";
 import http from "../../../utils/http"
-import { Table, Button, message, Input, Card, Popconfirm, Form, Select } from "antd"
+import { Table, Button, message, Card, Popconfirm, Form, Select } from "antd"
 import util from "../../../utils/util"
 import InviteState from "../../common/enums/InviteState.js"
 import { addTodo } from "../../actions";
 import { connect } from "react-redux"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
-import role from "../../common/role/role"
 
-const { Column } = Table;
 const FormItem = Form.Item;
 const Option = Select.Option;
 
 const CodeForm = Form.create()(class SearchCodeForm extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            roleList: []
-        }
-        role.getRoleList().then(data => {
-            this.setState({
-                roleList: data
-            })
-        })
-    }
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err,values) => {
@@ -34,7 +21,7 @@ const CodeForm = Form.create()(class SearchCodeForm extends Component {
         })
     }
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const { getFieldDecorator } = this.props.form , { roleList } = this.props;
         return(
             <Form
             layout="inline" 
@@ -49,7 +36,7 @@ const CodeForm = Form.create()(class SearchCodeForm extends Component {
                         placeholder="请选择一个角色"
                         >
                             {
-                                this.state.roleList.map((v,index) => (
+                                roleList && roleList.map((v,index) => (
                                     <Option key={index} value={v.id}>{v.name}</Option>
                                 ))
                             }
@@ -121,7 +108,7 @@ class CodeList extends Component {
     }
     params = null;
     query = (params) => {
-        this.params = params == "" ? null : params;
+        this.params = params === "" ? null : params;
         this.pageQuery()
     }
     render() {
@@ -188,4 +175,10 @@ class CodeList extends Component {
         )
     }
 }
-export default connect()(CodeList)
+const mapStateToProps = state => {
+    return {
+        roleList: state.GetRoleList.roleList
+    }
+}
+
+export default connect(mapStateToProps)(CodeList)

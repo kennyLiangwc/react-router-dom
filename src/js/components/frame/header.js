@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import http from "../../../utils/http.js"
-import { Row, Col, Avatar } from "antd"
+import { Col } from "antd"
 import { connect } from "react-redux"
-import { addUserInfo } from "../../actions/index"
+import { addUserInfo, getRoleList } from "../../actions/index"
 
 class Header extends Component {
     constructor(props) {
@@ -23,6 +23,7 @@ class Header extends Component {
                         portrait
                     }
                     menus
+                    isBindInviteToken
                 }
             }
         `;
@@ -32,7 +33,8 @@ class Header extends Component {
                 nickImg: data.getMyUserData.userInfo.portrait
             });
             this.props.dispatch(addUserInfo(data.getMyUserData.userInfo))
-        })
+        });
+        this.props.dispatch(getRoleList());
     }
     componentWillMount() {
         this.props.dispatch(addUserInfo({
@@ -50,7 +52,7 @@ class Header extends Component {
                 <Col span={4} offset={16}>
                     <span>欢迎回来：</span>
                     <span>{this.state.nickname}</span>
-                    <span><img src={this.state.nickImg} style={{width: "40px", borderRadius: "40px", marginLeft: "6px"}}/></span>
+                    <span><img alt="" src={this.state.nickImg} style={{width: "40px", borderRadius: "40px", marginLeft: "6px"}}/></span>
                 </Col>
             </div>
         )

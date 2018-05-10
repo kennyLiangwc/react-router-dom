@@ -6,9 +6,6 @@ import { withRouter } from "react-router-dom"
 const FormItem = Form.Item;
 
 const AddRoleForm = Form.create()(class addForm extends Component {
-    constructor(props) {
-        super(props)
-    }
     handleSearch(e) {
         e.preventDefault();
         this.props.form.validateFields((err,value) => {
@@ -50,7 +47,8 @@ const AddRoleForm = Form.create()(class addForm extends Component {
                             label="角色名称"
                             {...formItemLayout}
                         >
-                            {getFieldDecorator("name")(
+                            {getFieldDecorator("name",{
+                                rules: [{ required: true, message: '角色名不能为空哦~'}]})(
                                 <Input />
                             )}
                         </FormItem>

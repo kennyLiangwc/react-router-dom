@@ -3,7 +3,6 @@ import { Route, Redirect, Switch } from 'react-router-dom';
 
 import Bundle from "../components/Bundle"
 import menu from "../common/menu"
-import ui from "../../utils/ui"
 
 
 let routes = menu.getRouteList();		//获取路由列表
