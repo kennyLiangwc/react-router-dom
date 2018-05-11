@@ -27,13 +27,6 @@ let http = {};
 showLoading(false);
 http.post = function(action,params,needLoading = true) {
     showLoading(needLoading);
-    
-    const client = new GraphQLClient('/api/mis', {
-        headers: {
-            Authorization: JwtToken,
-            gtk
-        }
-    });
     return new Promise((reslove,reject) => {
         client.request(action,params).then(data => {
                 reslove(data);
@@ -46,6 +39,7 @@ http.post = function(action,params,needLoading = true) {
                 try {
                     let message = JSON.parse(errors[0].message);
                     ui.toast("error",message.msg);
+                    console.log("RetMsgMap",StaticCommonConst.RetMsgMap)
                     if(message.ret == -3) {      //未登录
                         ui.toast("error","请重新登录");
                         window.location.replace("#/login")

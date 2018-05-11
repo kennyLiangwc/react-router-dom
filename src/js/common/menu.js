@@ -38,17 +38,17 @@ let MenuMap = {
                         {
                             path: "/app/role/roleList",
                             name: "查询用户列表",
-                            permissionName: "queryUserList"
+                            permissionName: "queryRoleList"
                         },
                         {
                             path: "/app/role/delRole",
                             name: "删除角色",
-                            permissionName: "queryUserList"
+                            permissionName: "delRole"
                         },
                         {
                             path: "/app/role/editRole",
                             name: "修改角色",
-                            permissionName: "queryUserList"
+                            permissionName: "updateRole"
                         }
                     ]
                 },
@@ -62,7 +62,7 @@ let MenuMap = {
                         {
                             name: "新增角色",
                             path: "/app/role/addRole",
-                            permissionName: "queryUserList"
+                            permissionName: "addRole"
                         }
                     ]
                 },
@@ -72,9 +72,7 @@ let MenuMap = {
                     path: "/app/role/editRole/:id",
                     isMenu: false,
                     exact: true,
-                    contain: [
-                        
-                    ]
+                    contain: []
                 }
             ]
         },
@@ -93,12 +91,12 @@ let MenuMap = {
                         {
                             name: "查询邀请码",
                             path: "/app/role/codeList",
-                            permissionName: "queryUserList"
+                            permissionName: "queryCodeList"
                         },
                         {
                             name: "删除邀请码",
                             path: "/app/role/delCode",
-                            permissionName: "queryUserList"
+                            permissionName: "delCode"
                         }
                     ]
                 },
@@ -112,7 +110,7 @@ let MenuMap = {
                         {
                             name: "新增邀请码",
                             path: "/app/role/addCode",
-                            permissionName: "queryUserList"
+                            permissionName: "addCode"
                         }
                     ]
                 }
@@ -159,26 +157,38 @@ function getMenuByRightList(module, rightList) {
 }
 
 
-function getRouteList() {
+let containList = [];
+(function(){    //获取MenuMap里的contain,用于权限控制
+    Object.keys(MenuMap).map((key) => {
+        MenuMap[key].map((item) => {
+            item.children.map(c => {
+                c.contain.map(v => {
+                    containList.push(v)
+                })
+            })
+        })
+    })
+})();
+
+function getRouteList() {   //获取路由列表
     let routeList = [], menuList = MenuMap.role;
-    menuList.map(({children}) => {
-        children.map(({id,path,exact}) => {
-            routeList.push({
-                id,
-                path,
-                exact
+    Object.keys(MenuMap).map(key => {
+        MenuMap[key].map(({children}) => {
+            children.map(({id,path,exact}) => {
+                routeList.push({
+                    id,
+                    path,
+                    exact
+                })
             })
         })
     })
     return routeList
 }
-function getRoleCheckList() {
-    return MenuMap.role;
-}
 
 export default {
     getMenuByRightList: getMenuByRightList,
     getRouteList: getRouteList,
-    getRoleCheckList: getRoleCheckList,
-    MenuMap
+    MenuMap,
+    containList
 }

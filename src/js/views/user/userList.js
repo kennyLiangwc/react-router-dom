@@ -16,6 +16,9 @@ const UserForm = Form.create()(class SearchForm extends Component {
             }
         })
     }
+    reSet = e => {
+        this.props.form.resetFields()
+    }
     render() {
         const formItemLayout = {
             labelCol: { span: 8 },
@@ -51,14 +54,16 @@ const UserForm = Form.create()(class SearchForm extends Component {
                     )}
                 </FormItem>
                 <FormItem
-                    {...formItemLayout}
+                    // {...formItemLayout}
                 >
                     <Button type="primary" htmlType="submit">搜索</Button>
+                    <Button onClick={this.reSet} style={{marginLeft: "6px"}}>重置</Button>
                 </FormItem>
         </Form>
     }
 })
 
+//用户角色组件
 class UserRole extends Component {
     state = {
         selectedMap: {} 
@@ -98,6 +103,7 @@ class UserRole extends Component {
     }
 } 
 
+//用户列表
 class UserList extends Component {
     state = {
         list: [],
@@ -111,10 +117,10 @@ class UserList extends Component {
     }
     componentDidMount() {
         this.pageQuery();
-        this.queryRoleList()
     }
-    pageQuery() {
+    pageQuery() {   //查询用户列表
         const { pageNumber, pageSize } = this.page;
+        console.log(this.params)
         const input = {};
         const { name, unionId, uid } = this.params;
         if( name ) input.nickname = name.trim();
@@ -151,10 +157,10 @@ class UserList extends Component {
         this.params = params;
         this.pageQuery()
     }
-    toViewUserRole = (id) => {
+    toViewUserRole = (id) => { 
         this.queryUserRole(id)
     }
-    queryUserRole(id) {
+    queryUserRole(id) {     //查询用户角色
         const query = `
             query queryUserRoles($id:ID!) {
                 queryUserRoles(id:$id){
@@ -170,15 +176,6 @@ class UserList extends Component {
                 id,
                 userRoleVisible: true
             })
-        })
-    }
-    queryRoleList() {
-        let roleList = [];
-        role.getRoleList(true).then(data => {
-            roleList = data;
-            this.setState({
-                roleList
-            });
         })
     }
     setRoleList (list) {
@@ -215,6 +212,7 @@ class UserList extends Component {
         })
     }
     render() {
+        const { list, userRoleVisible, id, userRoleList } = this.state, { SetAuth, roleList } = this.props;
         const pagination = {
             total: this.page.total,
             current: this.page.pageNumber,
@@ -251,20 +249,21 @@ class UserList extends Component {
                 title: "操作",
                 dataIndex: "",
                 render: (text,record) => (
-                    <Button onClick={() => this.toViewUserRole(record.uid)}>查看角色</Button>
+                    SetAuth.queryRoleList ? <Button onClick={() => this.toViewUserRole(record.uid)}>查看角色</Button> : ""
                 )
             }
         ]
-        const { list, userRoleVisible, id, roleList, userRoleList } = this.state;
         return(
             <div className="gutter-example">
-                <Row gutter={16}>
-                     <BreadcrumbCustom first={"用户列表"}/>
-                     <UserForm query={this.query.bind(this)}/>
-                     <Card bordered={false}>
+                {
+                    SetAuth.queryUserList ? <Row gutter={16}>
+                        <BreadcrumbCustom first={"用户列表"}/>
+                        <UserForm query={this.query.bind(this)}/>
+                        <Card bordered={false}>
                         <Table dataSource={list} columns={columns} pagination={pagination} rowKey="userTable"></Table>
-                     </Card>
-                </Row>
+                        </Card>
+                    </Row> : ""
+                }
                 <Modal
                     title="查看用户角色"
                     visible={userRoleVisible}
@@ -279,9 +278,9 @@ class UserList extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log("state",state)
     return {
-
+        SetAuth: state.SetAuth,
+        roleList: state.GetRoleList.roleList
     }
 }
 export default connect(mapStateToProps)(UserList)

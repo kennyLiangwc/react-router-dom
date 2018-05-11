@@ -3,6 +3,7 @@ import http from "../../../utils/http"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
 import { Card, Form, Input, Button, message } from "antd"
 import { withRouter } from "react-router-dom"
+import { connect } from "react-redux"
 const FormItem = Form.Item;
 
 const AddRoleForm = Form.create()(class addForm extends Component {
@@ -30,12 +31,16 @@ const AddRoleForm = Form.create()(class addForm extends Component {
             }
         })
     }
+    reSet = e => {
+        this.props.form.resetFields()
+    }
     render() {
         const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 16 }
+            labelCol: { span: 6 },
+            wrapperCol: { span: 18 }
         }
         const { getFieldDecorator } = this.props.form;
+        const { SetAuth } = this.props;
         return <div>
             <BreadcrumbCustom first={"新增角色"}/>
                 <Card>
@@ -61,9 +66,10 @@ const AddRoleForm = Form.create()(class addForm extends Component {
                             )}
                         </FormItem>
                         <FormItem
-                            {...formItemLayout}
+                            // {...formItemLayout}
                         >
-                            <Button type="primary" htmlType="submit">新增</Button>
+                            { SetAuth.addRole ? <Button type="primary" htmlType="submit">新增</Button> : "" }
+                            <Button onClick={this.reSet} style={{marginLeft: "6px"}}>重置</Button>
                         </FormItem>
                     </Form>
                 </Card>
@@ -72,5 +78,9 @@ const AddRoleForm = Form.create()(class addForm extends Component {
     }
 })
 
-
-export default withRouter(AddRoleForm)
+const mapStateToProps = state => {
+    return {
+        SetAuth: state.SetAuth
+    }
+}
+export default connect(mapStateToProps)(withRouter(AddRoleForm))

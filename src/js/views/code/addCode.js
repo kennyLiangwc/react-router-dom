@@ -10,7 +10,7 @@ const confirm = Modal.confirm;
 const Option = Select.Option;
 
 class AddCode extends Component {
-    handleSubmit = (e) => {
+    handleSubmit = (e) => {     //提交
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
@@ -38,7 +38,11 @@ class AddCode extends Component {
             }
         });
     }
+    reSet = e => {
+        this.props.form.resetFields()
+    }
     render() {
+        const { SetAuth } = this.props;
         const { getFieldDecorator} = this.props.form, { roleList } = this.props;
         return(
             <div>
@@ -71,7 +75,8 @@ class AddCode extends Component {
                             )}
                         </FormItem>
                         <FormItem>
-                            <Button type="primary" htmlType="submit" >创建</Button>
+                            { SetAuth.addCode ? <Button type="primary" htmlType="submit" style={{marginRight: "6px"}}>创建</Button> : "" }
+                            <Button onClick={this.reSet}>重置</Button>
                         </FormItem>    
                     </Form>
                 </Card>
@@ -82,7 +87,8 @@ class AddCode extends Component {
 
 const mapStateToProps = state => {
     return {
-        roleList: state.GetRoleList.roleList
+        roleList: state.GetRoleList.roleList,
+        SetAuth: state.SetAuth
     }
 }
 const AddCodeForm = Form.create()(AddCode);

@@ -4,7 +4,7 @@ import { withRouter } from 'react-router-dom';
 import menu from '../../common/menu';
 import SiderMenu from './SiderMenu';
 import http from "../../../utils/http"
-import { addMyMenus } from "../../actions"
+import { setAuth } from "../../actions"
 import { connect } from "react-redux"
 
 class SiderCustom extends Component {
@@ -24,7 +24,7 @@ class SiderCustom extends Component {
             this.setState({
                 rightList: data.queryMyMenus
             });
-            this.props.dispatch(addMyMenus(data.queryMyMenus))
+            this.props.dispatch(setAuth(menu.containList,data.queryMyMenus))
         })
     }
 	componentDidMount() {

@@ -16,8 +16,6 @@ import Page from "./Page";
 
 const middleware = [thunk];
 const store = createStore(rootReducer,applyMiddleware(...middleware))
-console.log(store.getState());
-
 
 // class Demo2 extends React.Component {
 //   render() {

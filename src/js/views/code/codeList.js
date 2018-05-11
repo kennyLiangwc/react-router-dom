@@ -3,22 +3,24 @@ import http from "../../../utils/http"
 import { Table, Button, message, Card, Popconfirm, Form, Select } from "antd"
 import util from "../../../utils/util"
 import InviteState from "../../common/enums/InviteState.js"
-import { addTodo } from "../../actions";
 import { connect } from "react-redux"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom"
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 
+//查询邀请码form
 const CodeForm = Form.create()(class SearchCodeForm extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err,values) => {
             if(!err) {
-                console.log("value",values.role)
                 this.props.query(values.role)
             }
         })
+    }
+    reSet = e => {
+        this.props.form.resetFields()
     }
     render() {
         const { getFieldDecorator } = this.props.form , { roleList } = this.props;
@@ -44,12 +46,15 @@ const CodeForm = Form.create()(class SearchCodeForm extends Component {
                     )}
                 </FormItem>
                 <FormItem>
-                    <Button type="primary" htmlType="submit" >搜索</Button>
+                    <Button type="primary" htmlType="submit" style={{marginRight: "6px"}}>搜索</Button>
+                    <Button onClick={this.reSet}>重置</Button>
                 </FormItem>  
             </Form>
         )
     }
 })
+
+//邀请码列表
 class CodeList extends Component {
     constructor(props) {
         super(props);
@@ -60,14 +65,13 @@ class CodeList extends Component {
     }
     componentWillMount() {
         this.pageQuery();
-        this.props.dispatch(addTodo("1111111"))
     }
     page = {
         pageNumber: 1,
         pageSize: 10,
         total: 0
     }
-    pageQuery() {
+    pageQuery() {   //查询邀请码列表
         const { pageNumber, pageSize } = this.page;
         const query = `
             query QueryInviteTokenList($roleId:Int,$page:PageInput){
@@ -95,7 +99,7 @@ class CodeList extends Component {
             })
         })
     }
-    del(record) {
+    del(record) {       //删除邀请码
         const query = `mutation {
             delInviteToken(token: "${record.token}") {
                 ret
@@ -106,12 +110,13 @@ class CodeList extends Component {
             this.pageQuery();
         })
     }
-    params = null;
-    query = (params) => {
+    params = null;      //用于接收id
+    query = (params) => {   //传给form的方法
         this.params = params === "" ? null : params;
         this.pageQuery()
     }
     render() {
+        const { SetAuth, roleList } = this.props;
         const columns = [
             {
                 title: "邀请码",
@@ -140,7 +145,7 @@ class CodeList extends Component {
                 render: (text,record,index) => (
                     <div>
                         <Popconfirm title="确定要删除吗?" onConfirm={() => this.del(record)}>
-                                <a className="red">删除</a>
+                            { SetAuth.delCode ? <a className="red">删除</a> : "" }
                         </Popconfirm>
                     </div>
                 )
@@ -162,22 +167,25 @@ class CodeList extends Component {
             }
         }
         return(
+            SetAuth.queryCodeList ? 
             <div>
                 <BreadcrumbCustom first={"邀请码列表"}/>
                 <Card>
-                    <CodeForm query={this.query.bind(this)}/>
+                    <CodeForm query={this.query.bind(this)} roleList={roleList}/>
                     <Table rowKey="id" dataSource={this.state.list} columns={columns} pagination={pagination}>
                     
                     </Table>
                 </Card>
-                
             </div>
+            : ""
         )
     }
 }
+
 const mapStateToProps = state => {
     return {
-        roleList: state.GetRoleList.roleList
+        roleList: state.GetRoleList.roleList,
+        SetAuth: state.SetAuth
     }
 }
 

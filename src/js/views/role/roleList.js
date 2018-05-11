@@ -5,7 +5,7 @@ import permission from "../../../utils/permission"
 import util from "../../../utils/util"
 import http from "../../../utils/http"
 import BreadcrumbCustom from "../../components/breadcrumb/BreadcrumbCustom.jsx"
-
+import { connect } from "react-redux"
 
 
 class RoleList extends Component {
@@ -74,6 +74,7 @@ class RoleList extends Component {
         })
     }
     render() {
+        const { SetAuth } = this.props;
         const columns = [
             {
                 title: "角色名称",
@@ -102,8 +103,8 @@ class RoleList extends Component {
                 dataIndex: "id",
                 render: (text,record) =>(
                     <div>
-                        <Button onClick={() => this.delRole(record.id)} type="danger" style={{marginRight: "8px"}}>删除</Button>
-                        <Button type="primary" onClick={() => this.toEditRole(record)}>修改</Button>
+                        { SetAuth.delRole ? <Button onClick={() => this.delRole(record.id)} type="danger" style={{marginRight: "8px"}}>删除</Button> : "" }
+                        { SetAuth.updateRole ? <Button type="primary" onClick={() => this.toEditRole(record)}>修改</Button> : "" }
                     </div>
                 )
             }
@@ -125,21 +126,30 @@ class RoleList extends Component {
         }
         const { delRoleVisible, list } = this.state;
         return (
-            <div>
+            SetAuth.queryRoleList ? 
+                <div>
                 <Modal
-                    title="删除角色"
-                    visible={delRoleVisible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <p>确定要删除该角色吗？</p>
-                </Modal>
-                <BreadcrumbCustom first={"角色列表"}/>
-                <Card>
-                    <Table columns={columns} dataSource={list} pagination={pagination}></Table>
-                </Card>
-            </div>
+                        title="删除角色"
+                        visible={delRoleVisible}
+                        onOk={this.handleOk}
+                        onCancel={this.handleCancel}
+                    >
+                        <p>确定要删除该角色吗？</p>
+                    </Modal>
+                    
+                    <BreadcrumbCustom first={"角色列表"}/>
+                    <Card>
+                        <Table columns={columns} dataSource={list} pagination={pagination}></Table>
+                    </Card>
+                </div>
+            : ""
         )
     }
 }
-export default withRouter(RoleList)
+
+const mapStateToProps = state => {
+    return {
+        SetAuth: state.SetAuth
+    }
+}
+export default connect(mapStateToProps)(withRouter(RoleList))

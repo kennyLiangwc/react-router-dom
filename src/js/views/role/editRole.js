@@ -5,12 +5,12 @@ import { Card, Form, Input, Button, message, Popconfirm, Checkbox, Row } from "a
 import http from "../../../utils/http"
 import util from "../../../utils/util"
 import menu from "../../common/menu"
-// import { withRouter } from "react-router-dom"
 
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
 const editRole = util.data("editRole");
 
+//修改角色form
 const EditRoleForm = Form.create()(class RoleForm extends Component {
     handleUpdate = (e) => {
         e.preventDefault();
@@ -53,6 +53,7 @@ const EditRoleForm = Form.create()(class RoleForm extends Component {
     }
 })
 
+//角色菜单列表
 export default class EditRole extends Component {
     constructor(props) {
         super(props);
@@ -65,16 +66,14 @@ export default class EditRole extends Component {
         this.state = {
             id: id,
             checkedList: [],
-            indeterminate: true,
             checkAll: false,
-            selectedMap: {},
-            menuList: menu.getRoleCheckList()
+            selectedMap: {}
         }
     }
     componentWillMount() {
         this.queryRoleMenus()
     }
-    updateRole(values) {
+    updateRole(values) {        //修改角色基本信息
         const query = `
             mutation UpdateRole($id:ID!,$input:RoleInput){
                 updateRole(id:$id,input:$input){
@@ -98,7 +97,7 @@ export default class EditRole extends Component {
             util.data("editRole",editRole)
         })
     }
-    queryRoleMenus() {
+    queryRoleMenus() {      //查询角色菜单
         const { selectedMap, id } = this.state;
         const query = `
             query queryRoleMenus($id:ID!) {
@@ -116,12 +115,11 @@ export default class EditRole extends Component {
             })
         })
     }
-    onCheckAllChange = (e) => {
+    onCheckAllChange = (e) => {     //全选
         this.setState({
             checkAll: e.target.checked
         })
     }
-    selectedMap = {}
     isSelected (path) {
         return !!this.state.selectedMap[path]
     }
@@ -144,7 +142,7 @@ export default class EditRole extends Component {
             selectedMap
         })
     }
-    updateRoleMenu = () => {
+    updateRoleMenu = () => {        //修改角色权限
         const { selectedMap } = this.state, { id } = this.state;
         let tempList = util.parseMapKeyTrueToArray(selectedMap);
         const query = `
@@ -164,13 +162,7 @@ export default class EditRole extends Component {
         })
     }
     render() {
-        const tempList = [
-            {value: 1,label: 1},
-            {value: 2,label: 2},
-            {value: 3,label: 3},
-            {value: 4,label: 4}
-        ]
-        const { menuList } = this.state ,self = this;
+        const self = this, menuMap = menu.MenuMap;
         return(
             <div>
                 <BreadcrumbCustom first={"角色列表"} second="修改角色" firstLink="/app/role/roleList"/>
@@ -178,28 +170,30 @@ export default class EditRole extends Component {
                     <EditRoleForm updateRole={this.updateRole.bind(this)}/>
                     <div style={{ borderBottom: '1px solid #E9E9E9', margin: "10px 0"}}></div>
                     {
-                        menuList.map((item,index) => {
-                            return <div key={index} style={{margin: "12px"}}>
-                                    <Checkbox 
-                                    onChange={(e) => self.batSelect(item,e)}
-                                    >
-                                    {item.text}
-                                    <Row>
-                                        {
-                                            item.children.map((c,i) => {
-                                                return <span key={i}>
-                                                    {
-                                                        c.contain.map((v,n) => {
-                                                            return <Checkbox key={n} value={v.path} checked={self.isSelected(v.path)} onChange={() => self.select(v.path)} style={{margin: "10px"}}>{v.name}</Checkbox >
-                                                        })
-                                                    }
-                                                </span>
-                                            })
-                                        }
-                                    </Row>
-                                    
-                                </Checkbox>
-                            </div>
+                        Object.keys(menuMap).map(key => {
+                            return menuMap[key].map((item,index) => {
+                                return <div key={index} style={{margin: "12px"}}>
+                                        <Checkbox 
+                                        onChange={(e) => self.batSelect(item,e)}
+                                        >
+                                        {item.text}
+                                        <Row>
+                                            {
+                                                item.children.map((c,i) => {
+                                                    return <span key={i}>
+                                                        {
+                                                            c.contain.map((v,n) => {
+                                                                return <Checkbox key={n} value={v.path} checked={self.isSelected(v.path)} onChange={() => self.select(v.path)} style={{margin: "10px"}}>{v.name}</Checkbox >
+                                                            })
+                                                        }
+                                                    </span>
+                                                })
+                                            }
+                                        </Row>
+                                        
+                                    </Checkbox>
+                                </div>
+                            })
                         })
                     }
                     <Button onClick={this.updateRoleMenu}>修改</Button>
