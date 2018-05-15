@@ -4,6 +4,9 @@ import Login from './js/components/pages/Login';
 import App from './js/App';
 import React from "react";
 import BindInvite from "./js/components/pages/bindInvite"
+const Test = () => (
+	<div>bbbbbb</div>
+)
 
 export default () => (
 	<HashRouter>

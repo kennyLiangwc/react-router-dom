@@ -35,10 +35,6 @@ const AddRoleForm = Form.create()(class addForm extends Component {
         this.props.form.resetFields()
     }
     render() {
-        const formItemLayout = {
-            labelCol: { span: 6 },
-            wrapperCol: { span: 18 }
-        }
         const { getFieldDecorator } = this.props.form;
         const { SetAuth } = this.props;
         return <div>
@@ -50,7 +46,6 @@ const AddRoleForm = Form.create()(class addForm extends Component {
                     >
                         <FormItem
                             label="角色名称"
-                            {...formItemLayout}
                         >
                             {getFieldDecorator("name",{
                                 rules: [{ required: true, message: '角色名不能为空哦~'}]})(
@@ -59,14 +54,12 @@ const AddRoleForm = Form.create()(class addForm extends Component {
                         </FormItem>
                         <FormItem
                             label="描述"
-                            {...formItemLayout}
                         >
                             {getFieldDecorator("description")(
                                 <Input />
                             )}
                         </FormItem>
                         <FormItem
-                            // {...formItemLayout}
                         >
                             { SetAuth.addRole ? <Button type="primary" htmlType="submit">新增</Button> : "" }
                             <Button onClick={this.reSet} style={{marginLeft: "6px"}}>重置</Button>

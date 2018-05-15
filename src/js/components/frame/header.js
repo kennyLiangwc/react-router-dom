@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import http from "../../../utils/http.js"
-import { Col } from "antd"
+import { Col, message } from "antd"
 import { connect } from "react-redux"
 import { addUserInfo, getRoleList, setAuth } from "../../actions/index"
+import { withRouter } from "react-router-dom"
 
 class Header extends Component {
     constructor(props) {
@@ -28,6 +29,12 @@ class Header extends Component {
             }
         `;
         http.post(query,{},false).then(data => {
+            let isBind = data.getMyUserData.isBindInviteToken;
+            if(!isBind) {
+                message.info("请绑定邀请码");
+                this.props.history.push("/bindInvite");
+                return <div/>
+            }
             this.setState({
                 nickname: data.getMyUserData.userInfo.nickname,
                 nickImg: data.getMyUserData.userInfo.portrait
@@ -55,4 +62,4 @@ class Header extends Component {
     }
 };
 
-export default connect()(Header)
+export default connect()(withRouter(Header))

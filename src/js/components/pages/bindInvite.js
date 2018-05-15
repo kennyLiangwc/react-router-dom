@@ -6,6 +6,8 @@ const FormItem = Form.Item;
 
 const BindInvite = Form.create()(class BindInviteForm extends Component {
     handleSubmit = e => {
+        e.preventDefault();
+        const self = this;
         this.props.form.validateFields((err,values) => {
             if(!err) {
                 const query = `
@@ -20,7 +22,7 @@ const BindInvite = Form.create()(class BindInviteForm extends Component {
                     token: values.code
                 }).then(() => {
                     message.success("绑定成功，请重新扫码登录");
-                    this.props.history("/login")
+                    this.props.history.push("/login")
                 })
             }
         })

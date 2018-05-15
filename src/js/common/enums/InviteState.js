@@ -1,14 +1,14 @@
 import EnumBase from './EnumBase.js'
 var map = {
-    0: {
+    "-1": {
+        label: '已删除',
+        show: true
+    },
+    "0": {
         label: '初始化',
         show: true
     },
-    1: {
-        label: '未绑定',
-        show: true
-    },
-    2: {
+    "1": {
         label: '已绑定',
         show: true
     }

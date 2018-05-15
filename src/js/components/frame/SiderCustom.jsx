@@ -65,7 +65,7 @@ class SiderCustom extends Component {
             firstHide: false,
         })
     };
-    toggle = e => {
+    getRightList() {
 
     }
 	render() {

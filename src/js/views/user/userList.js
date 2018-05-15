@@ -65,18 +65,22 @@ const UserForm = Form.create()(class SearchForm extends Component {
 
 //用户角色组件
 class UserRole extends Component {
-    state = {
-        selectedMap: {} 
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedMap: {}
+        }
     }
-    componentWillMount() {
+    componentDidMount() {
         const { selectedMap } = this.state, { userRoleList } = this.props;
         userRoleList.map(v => {
             selectedMap[v.roleId] = true;
-        })
+        });
         this.setState({
             selectedMap
         });
     }
+   
     isSelected (id) {
         return !!this.state.selectedMap[id]
     }
@@ -120,7 +124,6 @@ class UserList extends Component {
     }
     pageQuery() {   //查询用户列表
         const { pageNumber, pageSize } = this.page;
-        console.log(this.params)
         const input = {};
         const { name, unionId, uid } = this.params;
         if( name ) input.nickname = name.trim();
@@ -269,6 +272,7 @@ class UserList extends Component {
                     visible={userRoleVisible}
                     onOk={this.handleOk}
                     onCancel={this.handleCancel}
+                    destroyOnClose="true"
                 >
                     <UserRole id={id} roleList={roleList} userRoleList={userRoleList} setRoleList={this.setRoleList.bind(this)}/>
                 </Modal>

@@ -124,7 +124,7 @@ let MenuMap = {
 
 
 function getMenuByRightList(module, rightList) {
-    return MenuMap[module]
+    // return MenuMap[module]
     const roleList = rightList;
     let menuList = MenuMap[module]; // 此时为数组, role等;
     const tempRightList = roleList.map(function(v) {
