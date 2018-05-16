@@ -103,8 +103,8 @@ class RoleList extends Component {
                 dataIndex: "id",
                 render: (text,record) =>(
                     <div>
-                        { SetAuth.delRole ? <Button onClick={() => this.delRole(record.id)} type="danger" style={{marginRight: "8px"}}>删除</Button> : "" }
-                        { SetAuth.updateRole ? <Button type="primary" onClick={() => this.toEditRole(record)}>修改</Button> : "" }
+                        { SetAuth.updateRole ? <Button type="primary" onClick={() => this.toEditRole(record)} style={{marginRight: "8px"}} >修改</Button> : "" }
+                        { SetAuth.delRole ? <Button onClick={() => this.delRole(record.id)} type="danger" >删除</Button> : "" }
                     </div>
                 )
             }

@@ -145,7 +145,7 @@ class CodeList extends Component {
                 render: (text,record,index) => (
                     <div>
                         <Popconfirm title="确定要删除吗?" onConfirm={() => this.del(record)}>
-                            { SetAuth.delCode ? <a className="red">删除</a> : "" }
+                            { SetAuth.delInviteToken ? <a className="red">删除</a> : "" }
                         </Popconfirm>
                     </div>
                 )
@@ -167,7 +167,7 @@ class CodeList extends Component {
             }
         }
         return(
-            SetAuth.queryCodeList ? 
+            SetAuth.queryInviteTokenList ? 
             <div>
                 <BreadcrumbCustom first={"邀请码列表"}/>
                 <Card>

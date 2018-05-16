@@ -22,7 +22,7 @@ const BindInvite = Form.create()(class BindInviteForm extends Component {
                     token: values.code
                 }).then(() => {
                     message.success("绑定成功，请重新扫码登录");
-                    this.props.history.push("/login")
+                    this.props.history.push("/app/user/userList")
                 })
             }
         })

@@ -2,8 +2,9 @@ import React, { Component } from "react";
 import http from "../../../utils/http.js"
 import { Col, message } from "antd"
 import { connect } from "react-redux"
-import { addUserInfo, getRoleList, setAuth } from "../../actions/index"
+import { addUserInfo, getRoleList, setAuth, myMenus } from "../../actions/index"
 import { withRouter } from "react-router-dom"
+import menu from "../../common/menu"
 
 class Header extends Component {
     constructor(props) {
@@ -39,12 +40,15 @@ class Header extends Component {
                 nickname: data.getMyUserData.userInfo.nickname,
                 nickImg: data.getMyUserData.userInfo.portrait
             });
-            this.props.dispatch(addUserInfo(data.getMyUserData.userInfo))
+            let myMenusList = data.getMyUserData.menus;
+            this.props.dispatch(addUserInfo(data.getMyUserData.userInfo));  //存储个人信息
+            this.props.dispatch(myMenus(myMenusList));        //存储菜单
+            this.props.dispatch(setAuth(menu.containList,myMenusList))    //设置权限
         });
     }
     componentWillMount() {
         this.queryUserInfo();
-        this.props.dispatch(getRoleList());
+        this.props.dispatch(getRoleList());     //拉取角色列表
     }
     render() {
         return(

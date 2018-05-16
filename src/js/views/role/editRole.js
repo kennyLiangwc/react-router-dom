@@ -5,6 +5,7 @@ import { Card, Form, Input, Button, message, Popconfirm, Checkbox, Row } from "a
 import http from "../../../utils/http"
 import util from "../../../utils/util"
 import menu from "../../common/menu"
+import { connect } from "react-redux"
 
 const FormItem = Form.Item;
 const CheckboxGroup = Checkbox.Group;
@@ -54,7 +55,7 @@ const EditRoleForm = Form.create()(class RoleForm extends Component {
 })
 
 //角色菜单列表
-export default class EditRole extends Component {
+class EditRole extends Component {
     constructor(props) {
         super(props);
         let id = this.props.computedMatch.params.id;
@@ -163,6 +164,7 @@ export default class EditRole extends Component {
     }
     render() {
         const self = this, menuMap = menu.MenuMap;
+        const { SetAuth } = this.props;
         return(
             <div>
                 <BreadcrumbCustom first={"角色列表"} second="修改角色" firstLink="/app/role/roleList"/>
@@ -196,9 +198,16 @@ export default class EditRole extends Component {
                             })
                         })
                     }
-                    <Button onClick={this.updateRoleMenu}>修改</Button>
+                    { SetAuth.updateRoleMenu ? <Button onClick={this.updateRoleMenu}>修改</Button> : "" }
                 </Card>
             </div>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        SetAuth: state.SetAuth
+    }
+}
+export default connect(mapStateToProps)(EditRole)

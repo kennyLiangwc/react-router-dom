@@ -38,11 +38,12 @@ http.post = function(action,params,needLoading = true) {
             if(errors && errors.length > 0) {
                 try {
                     let message = JSON.parse(errors[0].message);
-                    ui.toast("error",message.msg);
                     console.log("RetMsgMap",StaticCommonConst.RetMsgMap)
                     if(message.ret == -3) {      //未登录
                         // ui.toast("error","请重新登录");
                         window.location.replace("#/login")
+                    }else{    
+                        ui.toast("error",message.msg);
                     }
                 } catch (error) {
                     console.log("error1",error);

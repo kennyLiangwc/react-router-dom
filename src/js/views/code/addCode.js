@@ -55,7 +55,7 @@ class AddCode extends Component {
                             {getFieldDecorator('num', {
                                 rules: [{ required: true, message: '请输入正确的数字'}],
                             })(
-                                <Input  placeholder="请输入邀请码个数" type="number"/>
+                                <Input  placeholder="请输入邀请码个数" type="number" min="1"/>
                             )}
                         </FormItem>
                         <FormItem
@@ -75,7 +75,7 @@ class AddCode extends Component {
                             )}
                         </FormItem>
                         <FormItem>
-                            { SetAuth.addCode ? <Button type="primary" htmlType="submit" style={{marginRight: "6px"}}>创建</Button> : "" }
+                            { SetAuth.createInviteTokens ? <Button type="primary" htmlType="submit" style={{marginRight: "6px"}}>创建</Button> : "" }
                             <Button onClick={this.reSet}>重置</Button>
                         </FormItem>    
                     </Form>

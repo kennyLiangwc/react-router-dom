@@ -11,7 +11,7 @@ export default (state = {},action) => {
 			});
 			let obj = {};
 			action.menuList.map(item => {
-				return obj[item.permissionName] = check(item.path)
+				return obj[item.path] = check(item.path)
 			});
 			return  obj
 		default:

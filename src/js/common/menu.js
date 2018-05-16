@@ -15,9 +15,20 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            path: "/app/role/userList",
-                            name: "查询用户列表",
-                            permissionName: "queryUserList"
+                            path: "queryUserList",
+                            name: "查询用户列表"
+                        },
+                        {
+                            path: "queryUserRoles",
+                            name: "查询用户角色"
+                        },
+                        {
+                            path: "updateUserRole",
+                            name: "修改用户角色"
+                        },
+                        {
+                            path: "getMyUserData",
+                            name: "查询个人信息"
                         }
                     ]
                 }
@@ -36,19 +47,25 @@ let MenuMap = {
                     exact: true,
                     contain: [
                         {
-                            path: "/app/role/roleList",
-                            name: "查询用户列表",
-                            permissionName: "queryRoleList"
+                            path: "queryRoleList",
+                            name: "查询角色列表"
                         },
                         {
-                            path: "/app/role/delRole",
+                            path: "delRole",
                             name: "删除角色",
                             permissionName: "delRole"
                         },
                         {
-                            path: "/app/role/editRole",
-                            name: "修改角色",
-                            permissionName: "updateRole"
+                            path: "updateRole",
+                            name: "修改角色"
+                        },
+                        {
+                            path: "queryRoleMenus",
+                            name: "查询角色菜单"
+                        },
+                        {
+                            path: "updateRoleMenu",
+                            name: "修改角色菜单"
                         }
                     ]
                 },
@@ -61,8 +78,7 @@ let MenuMap = {
                     contain: [
                         {
                             name: "新增角色",
-                            path: "/app/role/addRole",
-                            permissionName: "addRole"
+                            path: "addRole"
                         }
                     ]
                 },
@@ -90,13 +106,11 @@ let MenuMap = {
                     contain: [
                         {
                             name: "查询邀请码",
-                            path: "/app/role/codeList",
-                            permissionName: "queryCodeList"
+                            path: "queryInviteTokenList"
                         },
                         {
                             name: "删除邀请码",
-                            path: "/app/role/delCode",
-                            permissionName: "delCode"
+                            path: "delInviteToken"
                         }
                     ]
                 },
@@ -109,8 +123,7 @@ let MenuMap = {
                     contain: [
                         {
                             name: "新增邀请码",
-                            path: "/app/role/addCode",
-                            permissionName: "addCode"
+                            path: "createInviteTokens"
                         }
                     ]
                 }
@@ -124,7 +137,7 @@ let MenuMap = {
 
 
 function getMenuByRightList(module, rightList) {
-    // return MenuMap[module]
+    return MenuMap[module]
     const roleList = rightList;
     let menuList = MenuMap[module]; // 此时为数组, role等;
     const tempRightList = roleList.map(function(v) {

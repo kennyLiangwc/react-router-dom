@@ -11,29 +11,14 @@ class SiderCustom extends Component {
 	state = {
         collapsed: false,
         openKey: '',
-        selectedKey: '',
-        rightList: []
-    };
-    queryMyMenus() {
-        const query = `
-            query queryMyMenus{
-                queryMyMenus
-            }
-        `;
-        http.post(query,{},false).then(data => {
-            this.setState({
-                rightList: data.queryMyMenus
-            });
-            this.props.dispatch(setAuth(menu.containList,data.queryMyMenus))
-        })
+        selectedKey: ''
     }
 	componentDidMount() {
         this.setMenuOpen(this.props);
-        this.queryMyMenus()
     }
     componentWillReceiveProps(nextProps) {
         this.toggleCollapsed(nextProps.collapsed);
-        this.setMenuOpen(nextProps)
+        this.setMenuOpen(nextProps);
     }
  	setMenuOpen = props => {
         let { pathname } = props.location;
@@ -69,11 +54,11 @@ class SiderCustom extends Component {
 
     }
 	render() {
-        const { rightList } = this.state;
+        const rightList = this.props.rightList;
 		return (
             <div>
                 <SiderMenu
-                    menus={menu.getMenuByRightList("role",this.state.rightList)}
+                    menus={menu.getMenuByRightList("role",rightList)}
                     theme="light"
                     mode="inline"
                     onClick={this.handleClick.bind(this)}
@@ -87,4 +72,11 @@ class SiderCustom extends Component {
 		)
 	}
 }
-export default connect()(withRouter(SiderCustom))
+
+
+const mapStateToProps = state => {
+    return {
+        rightList: state.GetMyMenus
+    }
+}
+export default connect(mapStateToProps)(withRouter(SiderCustom))

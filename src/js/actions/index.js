@@ -37,3 +37,7 @@ export function getRoleList() {
 	}
 }
 
+export const myMenus = menus => ({
+	type: "GET_MY_MENUS",
+	menus
+})

@@ -252,7 +252,7 @@ class UserList extends Component {
                 title: "操作",
                 dataIndex: "",
                 render: (text,record) => (
-                    SetAuth.queryRoleList ? <Button onClick={() => this.toViewUserRole(record.uid)}>查看角色</Button> : ""
+                    SetAuth.updateUserRole ? <Button onClick={() => this.toViewUserRole(record.uid)}>查看角色</Button> : ""
                 )
             }
         ]
@@ -263,7 +263,7 @@ class UserList extends Component {
                         <BreadcrumbCustom first={"用户列表"}/>
                         <UserForm query={this.query.bind(this)}/>
                         <Card bordered={false}>
-                        <Table dataSource={list} columns={columns} pagination={pagination} rowKey="userTable"></Table>
+                        <Table dataSource={list} columns={columns} pagination={pagination} rowKey="name" ></Table>
                         </Card>
                     </Row> : ""
                 }
@@ -282,6 +282,7 @@ class UserList extends Component {
 }
 
 const mapStateToProps = state => {
+    console.log(state)
     return {
         SetAuth: state.SetAuth,
         roleList: state.GetRoleList.roleList
