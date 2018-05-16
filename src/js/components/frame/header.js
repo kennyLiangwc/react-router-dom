@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import http from "../../../utils/http.js"
-import { Col, message } from "antd"
+import { Col, message, Icon, Layout } from "antd"
 import { connect } from "react-redux"
 import { addUserInfo, getRoleList, setAuth, myMenus } from "../../actions/index"
 import { withRouter } from "react-router-dom"
 import menu from "../../common/menu"
-
-class Header extends Component {
+const { Header } = Layout;
+class Header1 extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -52,18 +52,26 @@ class Header extends Component {
     }
     render() {
         return(
-            <div>
+            <Header style={{ background: '#fff', padding: 0, height: 65 }} className="custom-theme" >
+                <Col span={1}>
+                    <Icon
+                        className="trigger custom-trigger"
+                        type={this.props.collapsed ? 'menu-unfold' : 'menu-fold'}
+                        onClick={this.props.toggle}
+                    />
+                </Col>
+                
                 <Col span={4}>
                     <span style={{fontSize: "20px"}}>管理平台</span>
                 </Col>
-                <Col span={4} offset={16}>
+                <Col span={4} offset={14}>
                     <span>欢迎回来：</span>
                     <span>{this.state.nickname}</span>
                     <span><img alt="" src={this.state.nickImg} style={{width: "40px", borderRadius: "40px", marginLeft: "6px"}}/></span>
                 </Col>
-            </div>
+            </Header>
         )
     }
 };
 
-export default connect()(withRouter(Header))
+export default connect()(withRouter(Header1))

@@ -11,25 +11,30 @@ const { Header, Footer, Sider, Content } = Layout;
 
 
 class App extends Component {
-  render() {
-    return (
-      <Layout >
-        <Header style={{ color: "white" }} >
-          <Head />
-        </Header>
-        <Layout>
-          <Sider>
-            <SiderCustom />
-          </Sider>
-          <Content style={{margin: "12px"}}>
-            {/* 动态替换conten里的内容 */}
-            <Routes />
-          </Content>
+    state = {
+        collapsed: false,
+    };
+    toggle = () => {
+        this.setState({
+            collapsed: !this.state.collapsed,
+        });
+    };
+    render() {
+        return (
+            <Layout >
+                <SiderCustom collapsed={this.state.collapsed} />
+                <Layout style={{flexDirection: 'column'}}>
+                    <Head toggle={this.toggle} collapsed={this.state.collapsed} />
+                    <Content style={{margin: "12px"}}>
+                    {/* 动态替换conten里的内容 */}
+                        <Routes />
+                    </Content>
+                    <Footer style={{ textAlign: 'center' }}>
+                        互联网+影视管理平台 ©2018 Created by 腾讯影业
+                    </Footer>
+                </Layout>
+            
         </Layout>
-        <Footer style={{ textAlign: 'center' }}>
-            互联网+影视管理平台 ©2018 Created by 腾讯影业
-        </Footer>
-      </Layout>
     );
   }
 }

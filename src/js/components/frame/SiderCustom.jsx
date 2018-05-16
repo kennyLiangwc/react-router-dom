@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Icon, Button } from 'antd';
+import { Layout, Button } from 'antd';
 import { withRouter } from 'react-router-dom';
 import menu from '../../common/menu';
 import SiderMenu from './SiderMenu';
@@ -7,11 +7,14 @@ import http from "../../../utils/http"
 import { setAuth } from "../../actions"
 import { connect } from "react-redux"
 
+const { Sider } = Layout;
+
 class SiderCustom extends Component {
 	state = {
         collapsed: false,
         openKey: '',
-        selectedKey: ''
+        selectedKey: '',
+        firstHide: true
     }
 	componentDidMount() {
         this.setMenuOpen(this.props);
@@ -34,9 +37,11 @@ class SiderCustom extends Component {
 			openKey: e.keyPath[1]
 		})
 	};
-    toggleCollapsed = e => {
+    toggleCollapsed = (collapsed) => {
         this.setState({
-            collapsed: !this.state.collapsed,
+            collapsed,
+            firstHide: collapsed,
+            mode: collapsed ? 'vertical' : 'inline',
         });
     }
 	menuClick = e => {
@@ -56,10 +61,16 @@ class SiderCustom extends Component {
 	render() {
         const rightList = this.props.rightList;
 		return (
-            <div>
+            <Sider
+                trigger={null}
+                breakpoint="lg"
+                collapsed={this.props.collapsed}
+                style={{ overflowY: 'auto' }}
+            >
+                <div className="logo" />
                 <SiderMenu
                     menus={menu.getMenuByRightList("role",rightList)}
-                    theme="light"
+                    theme="dark"
                     mode="inline"
                     onClick={this.handleClick.bind(this)}
                     selectedKeys={[this.state.selectedKey]}
@@ -68,7 +79,7 @@ class SiderCustom extends Component {
                     style={{minHeight: "820px"}}
                 />
             
-            </div>
+            </Sider>
 		)
 	}
 }
