@@ -128,6 +128,23 @@ let MenuMap = {
                     ]
                 }
             ]
+        },
+        {
+            text: "上传图片",
+            icon: "code",
+            id: "upload",
+            children: [
+                {
+                    id: "InviteList",
+                    text: "上传",
+                    path: "/app/upload/upload",
+                    isMenu: true,
+                    exact: true,
+                    contain: [
+
+                    ]
+                }
+            ]
         }
     ]
 }
