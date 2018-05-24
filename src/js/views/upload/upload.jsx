@@ -1,41 +1,43 @@
 import React, { Component } from "react"
-import { Upload, Button, Icon, message } from "antd"
+import { Upload, Button, Icon, message, Modal } from "antd"
+import http from "../../../utils/http"
 
-function getBase64(img, callback) {
-    const reader = new FileReader();
-    reader.addEventListener('load', () => callback(reader.result));
-    reader.readAsDataURL(img);
-}
+let token = http.token;
 
-function beforeUpload(file) {
-    const isJPG = file.type === 'image/jpeg';
-    if (!isJPG) {
-        message.error('You can only upload JPG file!');
-    }
-    const isLt2M = file.size / 1024 / 1024 < 5;
-    if (!isLt2M) {
-        message.error('Image must smaller than 2MB!');
-    }
-    return isJPG && isLt2M;
-}
+
 
 export default class Avatar extends Component {
     state = {
         loading: false,
-    };
+        previewVisible: false,
+        previewImage: "",
+        token: token,
+        imageUrl: ""
+    }
+    handlePreview = (file) => {
+        this.setState({
+            previewImage: file.url || file.thumbUrl,
+            previewVisible: true,
+        });
+    }
+    remove = e => {
+        this.setState({
+            imageUrl: "",
+            loading: false
+        })
+    }
     handleChange = (info) => {
         if (info.file.status === 'uploading') {
             this.setState({ loading: true });
             return;
         }
         if (info.file.status === 'done') {
-            // Get this url from response in real world.
-            getBase64(info.file.originFileObj, imageUrl => this.setState({
-                imageUrl,
-                loading: false,
-            }));
+            this.setState({
+                imageUrl: `http://p94d2qxd7.bkt.clouddn.com/${info.file.response.hash}`
+            })
         }
     }
+    handleCancel = () => this.setState({ previewVisible: false })
     render() {
         const uploadButton = (
             <div>
@@ -43,19 +45,28 @@ export default class Avatar extends Component {
                 <div className="ant-upload-text">Upload</div>
             </div>
         );
-        const imageUrl = this.state.imageUrl;
+        const t = {
+            token: this.state.token
+        }
+        const { previewVisible, imageUrl } = this.state;
         return (
-            <Upload
-                name="avatar"
-                listType="picture-card"
-                className="avatar-uploader"
-                showUploadList={false}
-                action="//jsonplaceholder.typicode.com/posts/"
-                beforeUpload={beforeUpload}
-                onChange={this.handleChange}
-            >
-                {imageUrl ? <img src={imageUrl} alt="avatar" /> : uploadButton}
-            </Upload>
+            <div>
+                <Upload
+                    name="file"
+                    listType="picture-card"
+                    className="avatar-uploader"
+                    action="//up-z2.qiniup.com"
+                    onPreview={this.handlePreview}
+                    onChange={this.handleChange}
+                    onRemove={this.remove}
+                    data={t}
+                >
+                    {imageUrl ? "" : uploadButton}
+                </Upload>
+                <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel} style={{width: "200px"}}>
+                     <img alt="example" style={{ width: '100%' }} src={imageUrl} />
+                </Modal>
+            </div>
         );
     }
 }

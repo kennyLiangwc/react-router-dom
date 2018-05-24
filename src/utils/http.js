@@ -3,7 +3,8 @@ import StaticCommonConst from "./StaticCommonConst"
 import CSRFToken from "./CSRFToken"
 import { GraphQLClient } from "graphql-request"
 import ui from "./ui"
-
+import CryptoJS from "crypto-js"
+import { accessKey, secretKey } from "./UploadKey"
 
 const sessionId = util.getCookie(StaticCommonConst.COOKIE_NAMES.MIS.SESSION_ID);
 const gtk = CSRFToken(sessionId);
@@ -53,5 +54,50 @@ http.post = function(action,params,needLoading = true) {
         })
     })
 }
+
+/**
+ * 生成uptoken
+ *
+*/
+function utf16to8(str) {
+    var out, i, len, c;
+    out = "";
+    len = str.length;
+    for(i = 0; i < len; i++) {
+        c = str.charCodeAt(i);
+        if ((c >= 0x0001) && (c <= 0x007F)) {
+            out += str.charAt(i);
+        } else if (c > 0x07FF) {
+            out += String.fromCharCode(0xE0 | ((c >> 12) & 0x0F));
+            out += String.fromCharCode(0x80 | ((c >> 6) & 0x3F));
+            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+        } else {
+            out += String.fromCharCode(0xC0 | ((c >> 6) & 0x1F));
+            out += String.fromCharCode(0x80 | ((c >> 0) & 0x3F));
+        }
+    }
+    return out;
+}
+function safe64(base64) {
+    base64 = base64.replace(/\+/g, "-");
+    base64 = base64.replace(/\//g, "_");
+    return base64;
+}
+
+const putPolicy = {
+    "scope": "yxcm",
+    "deadline": 1605064271
+}
+//将上传策略序列化成为JSON：
+const put_policy = JSON.stringify(putPolicy)
+
+const encoded = btoa(utf16to8(put_policy));
+
+let hash = CryptoJS.HmacSHA1(encoded, secretKey);
+
+let encoded_signed = hash.toString(CryptoJS.enc.Base64);
+
+let upload_token = accessKey + ":" + safe64(encoded_signed) + ":" + encoded;
+http.token = upload_token;
 
 export default http
